@@ -1,0 +1,55 @@
+---
+
+- name: Include tasks
+  include_role:
+    name: git
+    tasks_from: "{{ item }}"
+  with_first_found:
+    - "{{ lower_distribution }}.yml"
+    - "{{ lower_os_family }}.yml"
+  tags: git
+
+- name: Create directory
+  file:
+    path: /opt/git
+    state: directory
+  tags: git
+
+- name: Download tarball
+  get_url:
+    url: "https://mirrors.edge.kernel.org/pub/software/scm/git/git-{{ git_version }}.tar.gz"
+    dest: "/var/tmp/git-{{ git_version }}.tar.gz"
+
+- name: Unarchive
+  unarchive:
+    src: "/var/tmp/git-{{ git_version }}.tar.gz"
+    dest: "/opt/git"
+    extra_opts:
+      - "--no-same-owner"
+    remote_src: yes
+  tags: git
+
+- name: Install
+  shell: "make configure && ./configure --prefix=/opt/git/git-{{ git_version }} && make all && make install"
+  args:
+    chdir: "/opt/git/git-{{ git_version }}"
+  tags: git
+
+- name: Set path
+  template:
+    src: git.sh.j2
+    dest: /etc/profile.d/git.sh
+  tags: git
+
+- name: git --version
+  shell: git --version
+  environment:
+    PATH: "/opt/git/git-{{ git_version }}/bin:{{ ansible_env.PATH }}"
+  register: git_installed_version
+  tags: git
+
+- name: Installed version
+  debug:
+    msg: "installed: {{ git_installed_version.stdout }}"
+  tags: git
+
