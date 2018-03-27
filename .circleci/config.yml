@@ -18,11 +18,13 @@ jobs:
       - run: &ansible_info
           name: Ansible info
           command: |
+            cd ansible
             ansible --version
             ansible localhost -m setup
       - run: &ansible_test
           name: Ansible Test
           command: |
+            cd ansible
             ansible-playbook playbooks/mastodon-setup.yml
   ubuntu:
     docker:
