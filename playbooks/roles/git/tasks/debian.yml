@@ -1,0 +1,14 @@
+---
+
+- name: Install dependencies
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - autoconf
+    - build-essential
+    - gettext
+    - libcurl4-gnutls-dev
+    - libexpat1-dev
+    - libssl-dev
+    - libz-dev
+  tags: git

@@ -1,0 +1,15 @@
+---
+
+- name: Install dependencies
+  yum:
+    name: "{{ item }}"
+  with_items:
+    - autoconf
+    - curl-devel
+    - expat-devel
+    - gettext-devel
+    - make
+    - openssl-devel
+    - perl-devel
+    - zlib-devel
+  tags: git
