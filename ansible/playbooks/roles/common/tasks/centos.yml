@@ -1,0 +1,13 @@
+---
+
+- name: yum update
+  yum:
+    name: "*"
+    update_cache: yes
+  tags: common
+
+- name: Install packages
+  yum:
+    name: "{{ item }}"
+  with_items: "{{ common_install_packages }}"
+  tags: common

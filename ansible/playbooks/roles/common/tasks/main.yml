@@ -1,0 +1,17 @@
+---
+
+- name: "Include {{ ansible_distribution }} vars"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ lower_distribution }}.yml"
+    - "{{ lower_os_family }}.yml"
+  tags: common
+
+- name: Include tasks
+  include_role:
+    name: common
+    tasks_from: "{{ item }}"
+  with_first_found:
+    - "{{ lower_distribution }}.yml"
+    - "{{ lower_os_family }}.yml"
+  tags: common
