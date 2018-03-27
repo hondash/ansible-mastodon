@@ -1,0 +1,13 @@
+---
+
+- name: apt update
+  apt:
+    name: "*"
+    update_cache: yes
+  tags: common
+
+- name: Install packages
+  apt:
+    name: "{{ item }}"
+  with_items: "{{ common_install_packages }}"
+  tags: common
