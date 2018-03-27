@@ -1,0 +1,18 @@
+---
+
+- name: Download setup file
+  get_url:
+    url: https://rpm.nodesource.com/setup_6.x
+    dest: /var/tmp/nodejs-setup_6.x
+    mode: "u+x"
+  tags: nodejs
+
+- name: Execute setup file (add nodejs repository)
+  shell: /var/tmp/nodejs-setup_6.x
+  tags: nodejs
+
+- name: Install nodejs
+  yum:
+    name: nodejs
+    update_cache: yes
+  tags: nodejs

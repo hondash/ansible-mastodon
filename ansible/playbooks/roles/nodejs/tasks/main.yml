@@ -1,0 +1,20 @@
+---
+
+- name: Include tasks
+  include_role:
+    name: nodejs
+    tasks_from: "{{ item }}"
+  with_first_found:
+    - "{{ lower_distribution }}.yml"
+    - "{{ lower_os_family }}.yml"
+  tags: nodejs
+
+- name: node --version
+  shell: node --version
+  register: nodejs_installed_version
+  tags: nodejs
+
+- name: Installed version
+  debug:
+    msg: "installed: {{ nodejs_installed_version.stdout }}"
+  tags: nodejs
