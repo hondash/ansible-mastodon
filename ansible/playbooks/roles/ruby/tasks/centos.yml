@@ -1,0 +1,9 @@
+---
+
+- name: Install dependencies
+  yum:
+    name: "{{ item }}"
+  with_items:
+    - bzip2
+    - readline-devel
+  tags: ruby

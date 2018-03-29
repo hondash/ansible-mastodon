@@ -1,0 +1,8 @@
+---
+
+- name: Install dependencies
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - libreadline-dev
+  tags: ruby
