@@ -8,3 +8,4 @@
     - role: common
     - role: git
     - role: nodejs
+    - role: yarn
