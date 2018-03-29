@@ -1,0 +1,20 @@
+---
+
+- name: Include tasks
+  include_role:
+    name: yarn
+    tasks_from: "{{ item }}"
+  with_first_found:
+    - "{{ lower_distribution }}.yml"
+    - "{{ lower_os_family }}.yml"
+  tags: yarn
+
+- name: yarn --version
+  shell: yarn --version
+  register: yarn_installed_version
+  tags: yarn
+
+- name: Installed version
+  debug:
+    msg: "installed: {{ yarn_installed_version.stdout }}"
+  tags: yarn

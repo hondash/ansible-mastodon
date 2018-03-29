@@ -1,0 +1,20 @@
+---
+
+- name: Add key
+  apt_key:
+    url: https://dl.yarnpkg.com/debian/pubkey.gpg
+  tags: yarn
+
+- name: Add sources.list
+  template:
+    src: yarn.list.j2
+    dest: /etc/apt/sources.list.d/yarn.list
+  tags: yarn
+
+- name: Install yarn
+  apt:
+    name: yarn
+    update_cache: yes
+  tags: yarn
+
+
