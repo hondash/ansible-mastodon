@@ -2,4 +2,5 @@
 
 - name: Add user
   user:
-    name: mastodon
+    name: "{{ user_name }}"
+  tags: user
