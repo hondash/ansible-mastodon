@@ -4,10 +4,6 @@ jobs:
     docker:
       - image: centos:7.4.1708
     steps:
-      # - run: &install_commands
-      #     name: Install commands
-      #     command: |
-      #       yum -y install git
       - checkout
       - run:
           name: Install ansible
@@ -30,10 +26,6 @@ jobs:
     docker:
       - image: ubuntu:16.04
     steps: &debian
-      # - run:
-      #     <<: *install_commands
-      #     command: |
-      #       apt-get update && apt-get -y install git
       - checkout
       - run:
           name: Install ansible
