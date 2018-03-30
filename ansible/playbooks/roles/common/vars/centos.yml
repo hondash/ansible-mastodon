@@ -2,3 +2,4 @@
 
 common_install_packages:
   - sudo
+  - which
