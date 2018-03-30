@@ -1,3 +1,4 @@
 ---
 
-common_install_packages: []
+common_install_packages:
+  - sudo

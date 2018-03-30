@@ -1,0 +1,107 @@
+---
+
+- name: Include tasks
+  include_role:
+    name: ruby
+    tasks_from: "{{ item }}"
+  with_first_found:
+    - "{{ lower_distribution }}.yml"
+    - "{{ lower_os_family }}.yml"
+  tags: ruby
+
+- name: git clone rbenv
+  git:
+    repo: https://github.com/rbenv/rbenv.git
+    dest: ~/.rbenv
+  environment:
+    PATH: "/opt/git/git-{{ git_version }}/bin:{{ ansible_env.PATH }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: ruby
+
+- name: make rbenv
+  shell: src/configure && make -C src
+  args:
+    chdir: ~/.rbenv
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: ruby
+
+- NAME: Get mastodon user info
+  getent:
+    database: passwd
+    key: "{{ user_name }}"
+  tags: ruby
+
+- name: Execute rbenv init
+  shell: rbenv init -
+  become: yes
+  become_user: "{{ user_name }}"
+  environment:
+    PATH: "{{ getent_passwd.mastodon[4] }}/.rbenv/bin:{{ ansible_env.PATH }}"
+  register: rbenv_init_result
+  tags: ruby
+
+- name: Add environment path
+  blockinfile:
+      path: ~/.bashrc
+      block: |
+        export PATH="$HOME/.rbenv/bin:$PATH"
+        {{ rbenv_init_result }}
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: ruby
+
+- name: git clone ruby-build
+  git:
+    repo: https://github.com/rbenv/ruby-build.git
+    dest: ~/.rbenv/plugins/ruby-build
+    version: v20180329
+  environment:
+    PATH: "/opt/git/git-{{ git_version }}/bin:{{ ansible_env.PATH }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: ruby
+
+- name: rbenv install --list
+  shell: rbenv install --list
+  become: yes
+  become_user: "{{ user_name }}"
+  environment:
+    PATH: "{{ getent_passwd.mastodon[4] }}/.rbenv/bin:{{ ansible_env.PATH }}"
+  register: ruby_available_versions
+  tags: ruby
+
+- name: Ruby available versions
+  debug:
+    var: ruby_available_versions.stdout_lines
+  tags: ruby
+
+- name: Install ruby via rbenv
+  shell: "rbenv install {{ ruby_version }} && rbenv global {{ ruby_version }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  environment:
+    PATH: "{{ getent_passwd.mastodon[4] }}/.rbenv/bin:{{ ansible_env.PATH }}"
+  tags: ruby
+
+- name: rbenv which ruby
+  shell: rbenv which ruby
+  become: yes
+  become_user: "{{ user_name }}"
+  environment:
+    PATH: "{{ getent_passwd.mastodon[4] }}/.rbenv/bin:{{ ansible_env.PATH }}"
+  register: ruby_executable_file
+  tags: ruby
+
+- name: ruby --version
+  shell: "{{ ruby_executable_file.stdout }} --version"
+  register: ruby_installed_version
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: ruby
+
+- name: Installed version
+  debug:
+    msg: "installed: {{ ruby_installed_version.stdout }}"
+  tags: ruby

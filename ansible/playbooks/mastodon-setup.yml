@@ -10,3 +10,4 @@
     - role: nodejs
     - role: yarn
     - role: user
+    - role: ruby
