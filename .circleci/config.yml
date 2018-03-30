@@ -3,14 +3,19 @@ jobs:
   centos:
     docker:
       - image: centos:7.4.1708
+    environment: &env_vars
+      - ANSIBLE_VERSION: 2.5.0
     steps:
       - checkout
       - run:
-          name: Install ansible
+          name: Install dependencies
           command: |
             yum -y install curl gcc python-devel
+      - run: &install_ansible
+          name: Install ansible
+          command: |
             curl -fsSL https://bootstrap.pypa.io/get-pip.py | python2
-            pip2 install ansible==2.5.0
+            pip2 install ansible==$ANSIBLE_VERSION
       - run: &ansible_info
           name: Ansible info
           command: |
@@ -25,19 +30,20 @@ jobs:
   ubuntu:
     docker:
       - image: ubuntu:16.04
+    environment: *env_vars
     steps: &debian
       - checkout
       - run:
-          name: Install ansible
+          name: Install dependencies
           command: |
             apt update && apt -y install curl build-essential python-dev
-            curl -fsSL https://bootstrap.pypa.io/get-pip.py | python2
-            pip2 install ansible==2.5.0
+      - run: *install_ansible
       - run: *ansible_info
       - run: *ansible_test
   debian:
     docker:
       - image: debian:stretch
+    environment: *env_vars
     steps: *debian
 workflows:
   version: 2
