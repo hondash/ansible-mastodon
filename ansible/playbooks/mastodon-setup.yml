@@ -11,3 +11,4 @@
     - role: yarn
     - role: user
     - role: ruby
+    - role: postgresql

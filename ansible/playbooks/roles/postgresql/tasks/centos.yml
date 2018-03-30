@@ -1,0 +1,24 @@
+---
+
+- name: Add postgresql repository
+  yum:
+    name: https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7-x86_64/pgdg-centos10-10-2.noarch.rpm
+  tags: postgresql
+
+- name: Install postgresql
+  yum:
+    name: postgresql10-server
+    update_cache: yes
+  tags: postgresql
+
+- name: postgres --version
+  shell: postgres --version
+  environment:
+    PATH: "/usr/pgsql-10/bin:{{ ansible_env.PATH }}"
+  register: postgresql_installed_version
+  tags: postgresql
+
+- name: Installed version
+  debug:
+    msg: "installed: {{ postgresql_installed_version.stdout }}"
+  tags: postgresql
