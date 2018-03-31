@@ -13,7 +13,10 @@
 
 - name: Install postgresql
   apt:
-    name: postgresql-10
+    name: "{{ item }}"
     update_cache: yes
+  with_items:
+    - postgresql-10
+    - postgresql-10-contrib
   register: hoge
   tags: postgresql

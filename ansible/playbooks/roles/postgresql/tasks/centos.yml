@@ -7,6 +7,9 @@
 
 - name: Install postgresql
   yum:
-    name: postgresql10-server
+    name: "{{ item }}"
     update_cache: yes
+  with_items:
+    - postgresql10-server
+    - postgresql10-contrib
   tags: postgresql
