@@ -18,5 +18,4 @@
   with_items:
     - postgresql-10
     - postgresql-10-contrib
-  register: hoge
   tags: postgresql
