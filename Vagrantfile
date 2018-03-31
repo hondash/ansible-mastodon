@@ -20,6 +20,7 @@ Vagrant.configure("2") do |config|
     ansible.groups = {
       "test" => ["centos", "debian", "ubuntu"],
       "test:vars" => {
+        "postgresql_user_password": "test_password"
       }
     }
   end
