@@ -17,15 +17,3 @@
     update_cache: yes
   register: hoge
   tags: postgresql
-
-- name: postgres --version
-  shell: postgres --version
-  environment:
-    PATH: "/usr/lib/postgresql/10/bin:{{ ansible_env.PATH }}"
-  register: postgresql_installed_version
-  tags: postgresql
-
-- name: Installed version
-  debug:
-    msg: "installed: {{ postgresql_installed_version.stdout }}"
-  tags: postgresql
