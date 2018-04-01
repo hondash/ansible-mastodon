@@ -1,7 +1,7 @@
 ---
 
 - name: Setup Mastodon
-  hosts: localhost
+  hosts: all
   become: true
   become_user: root
   roles:

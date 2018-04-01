@@ -12,8 +12,11 @@ Vagrant.configure("2") do |config|
     ansible.install_mode = "pip"
     ansible.version = "2.5.0"
     ansible.compatibility_mode = "2.0"
-    ansible.verbose = "-v"
+    ansible.become = true
+    ansible.become_user = "root"
+    #ansible.verbose = "-vvv"
     ansible.playbook = "ansible/playbooks/mastodon-setup.yml"
+    ansible.config_file = "ansible/ansible.cfg"
     ansible.groups = {
       "test" => ["centos", "debian", "ubuntu"],
       "test:vars" => {
