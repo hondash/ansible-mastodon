@@ -12,7 +12,7 @@
 - name: git clone rbenv
   git:
     repo: https://github.com/rbenv/rbenv.git
-    dest: ~/.rbenv
+    dest: "{{ ruby_rbenv_path }}"
   environment:
     PATH: "/opt/git/git-{{ git_version }}/bin:{{ ansible_env.PATH }}"
   become: yes
@@ -22,15 +22,9 @@
 - name: make rbenv
   shell: src/configure && make -C src
   args:
-    chdir: ~/.rbenv
+    chdir: "{{ ruby_rbenv_path }}"
   become: yes
   become_user: "{{ user_name }}"
-  tags: ruby
-
-- NAME: Get mastodon user info
-  getent:
-    database: passwd
-    key: "{{ user_name }}"
   tags: ruby
 
 - name: Execute rbenv init
@@ -38,7 +32,7 @@
   become: yes
   become_user: "{{ user_name }}"
   environment:
-    PATH: "{{ getent_passwd.mastodon[4] }}/.rbenv/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ ruby_rbenv_path }}/bin:{{ ansible_env.PATH }}"
   register: rbenv_init_result
   tags: ruby
 
@@ -55,7 +49,7 @@
 - name: git clone ruby-build
   git:
     repo: https://github.com/rbenv/ruby-build.git
-    dest: ~/.rbenv/plugins/ruby-build
+    dest: "{{ ruby_rbenv_path }}/plugins/ruby-build"
     version: v20180329
   environment:
     PATH: "/opt/git/git-{{ git_version }}/bin:{{ ansible_env.PATH }}"
@@ -68,7 +62,7 @@
   become: yes
   become_user: "{{ user_name }}"
   environment:
-    PATH: "{{ getent_passwd.mastodon[4] }}/.rbenv/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ ruby_rbenv_path }}/bin:{{ ansible_env.PATH }}"
   register: ruby_available_versions
   tags: ruby
 
@@ -77,12 +71,20 @@
     var: ruby_available_versions.stdout_lines
   tags: ruby
 
+- name: "Check that ruby v{{ ruby_version }} is installed"
+  stat:
+    path: "{{ ruby_rbenv_path }}/versions/{{ ruby_version }}"
+  register: ruby_installed_dir
+  tags: ruby
+
 - name: Install ruby via rbenv
+  when: not ruby_installed_dir.stat.exists
   shell: "rbenv install {{ ruby_version }} && rbenv global {{ ruby_version }}"
   become: yes
   become_user: "{{ user_name }}"
   environment:
-    PATH: "{{ getent_passwd.mastodon[4] }}/.rbenv/bin:{{ ansible_env.PATH }}"
+    RUBY_CONFIGURE_OPTS: "--disable-install-doc"
+    PATH: "{{ ruby_rbenv_path }}/bin:{{ ansible_env.PATH }}"
   tags: ruby
 
 - name: rbenv which ruby
@@ -90,7 +92,7 @@
   become: yes
   become_user: "{{ user_name }}"
   environment:
-    PATH: "{{ getent_passwd.mastodon[4] }}/.rbenv/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ ruby_rbenv_path }}/bin:{{ ansible_env.PATH }}"
   register: ruby_executable_file
   tags: ruby
 
