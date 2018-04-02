@@ -1,5 +1,10 @@
 ---
 
+- name: Install dependencies
+  apt:
+    name: python-psycopg2
+  tags: postgresql
+
 - name: Add postgresql repository
   template:
     src: pgdg.list.j2
@@ -13,19 +18,27 @@
 
 - name: Install postgresql
   apt:
-    name: postgresql-10
+    name: "{{ item }}"
     update_cache: yes
-  register: hoge
+  with_items:
+    - postgresql-10
   tags: postgresql
 
-- name: postgres --version
-  shell: postgres --version
-  environment:
-    PATH: "/usr/lib/postgresql/10/bin:{{ ansible_env.PATH }}"
-  register: postgresql_installed_version
+- name: Start postgresql
+  when: ansible_virtualization_type != "docker"
+  systemd:
+    name: postgresql
+    enabled: yes
+    state: started
   tags: postgresql
 
-- name: Installed version
-  debug:
-    msg: "installed: {{ postgresql_installed_version.stdout }}"
+- name: Add DB user
+  when: ansible_virtualization_type != "docker"
+  postgresql_user:
+    name: "{{ postgresql_user }}"
+    password: "{{ postgresql_user_password | password_hash('sha512') }}"
+    encrypted: yes
+    role_attr_flags: CREATEDB
+  become: yes
+  become_user: postgres
   tags: postgresql

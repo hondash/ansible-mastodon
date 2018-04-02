@@ -1,5 +1,10 @@
 ---
 
+- name: Install dependencies
+  yum:
+    name: python-psycopg2
+  tags: postgresql
+
 - name: Add postgresql repository
   yum:
     name: https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7-x86_64/pgdg-centos10-10-2.noarch.rpm
@@ -7,18 +12,35 @@
 
 - name: Install postgresql
   yum:
-    name: postgresql10-server
+    name: "{{ item }}"
     update_cache: yes
+  with_items:
+    - postgresql10-server
+    - postgresql10-contrib
   tags: postgresql
 
-- name: postgres --version
-  shell: postgres --version
-  environment:
-    PATH: "/usr/pgsql-10/bin:{{ ansible_env.PATH }}"
-  register: postgresql_installed_version
+- name: Setup database
+  when: ansible_virtualization_type != "docker"
+  shell: "{{ postgresql_path }}/bin/postgresql-10-setup initdb"
+  args:
+    creates: /var/lib/pgsql/10/data/postgresql.conf
   tags: postgresql
 
-- name: Installed version
-  debug:
-    msg: "installed: {{ postgresql_installed_version.stdout }}"
+- name: Start postgresql
+  when: ansible_virtualization_type != "docker"
+  systemd:
+    name: postgresql-10
+    enabled: yes
+    state: started
+  tags: postgresql
+
+- name: Add DB user
+  when: ansible_virtualization_type != "docker"
+  postgresql_user:
+    name: "{{ postgresql_user }}"
+    password: "{{ postgresql_user_password | password_hash('sha512') }}"
+    encrypted: yes
+    role_attr_flags: CREATEDB
+  become: yes
+  become_user: postgres
   tags: postgresql

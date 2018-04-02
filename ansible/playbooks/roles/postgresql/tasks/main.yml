@@ -1,5 +1,12 @@
 ---
 
+- name: "Include {{ ansible_distribution }} vars"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ lower_distribution }}.yml"
+    - "{{ lower_os_family }}.yml"
+  tags: postgresql
+
 - name: Include tasks
   include_role:
     name: postgresql
@@ -7,4 +14,16 @@
   with_first_found:
     - "{{ lower_distribution }}.yml"
     - "{{ lower_os_family }}.yml"
+  tags: postgresql
+
+- name: postgres --version
+  shell: postgres --version
+  environment:
+    PATH: "{{ postgresql_path }}/bin:{{ ansible_env.PATH }}"
+  register: postgresql_installed_version
+  tags: postgresql
+
+- name: Installed version
+  debug:
+    msg: "installed: {{ postgresql_installed_version.stdout }}"
   tags: postgresql
