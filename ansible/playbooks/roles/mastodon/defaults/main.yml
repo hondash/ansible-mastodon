@@ -1,0 +1,5 @@
+---
+
+mastodon_path: "/home/{{ user_name }}/live"
+
+mastodon_version: v2.3.3

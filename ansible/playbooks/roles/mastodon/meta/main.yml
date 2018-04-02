@@ -1,0 +1,7 @@
+dependencies:
+  - { role: user }
+  - { role: git }
+  - { role: nodejs }
+  - { role: yarn }
+  - { role: ruby }
+  - { role: postgresql }

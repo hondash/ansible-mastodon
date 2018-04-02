@@ -7,9 +7,4 @@
   roles:
     - role: common
     - role: timezone
-    - role: git
-    - role: nodejs
-    - role: yarn
-    - role: user
-    - role: ruby
-    - role: postgresql
+    - role: mastodon
