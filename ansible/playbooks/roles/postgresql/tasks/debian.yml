@@ -21,7 +21,8 @@
     name: "{{ item }}"
     update_cache: yes
   with_items:
-    - postgresql-10
+    - postgresql
+    - postgresql-contrib
   tags: postgresql
 
 - name: Start postgresql
