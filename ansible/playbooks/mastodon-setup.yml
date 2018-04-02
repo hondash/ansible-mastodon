@@ -6,6 +6,7 @@
   become_user: root
   roles:
     - role: common
+    - role: timezone
     - role: git
     - role: nodejs
     - role: yarn
