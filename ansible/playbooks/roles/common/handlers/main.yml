@@ -1,2 +1,11 @@
 ---
-# handlers file for common
+
+- name: swapoff
+  shell: swapoff /swapfile
+  listen: "disable swap"
+
+- name: remove swapfile
+  file:
+    path: /swapfile
+    state: absent
+  listen: "disable swap"

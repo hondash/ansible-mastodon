@@ -15,3 +15,27 @@
     - "{{ lower_distribution }}.yml"
     - "{{ lower_os_family }}.yml"
   tags: common
+
+# If tasks fail because of out of memory, use 'common_enable_swap' variable to true
+- name: free -m
+  when: common_enable_swap
+  shell: free -m
+
+- name: dd if=/dev/zero of=/swapfile bs=1M count=500
+  shell: dd if=/dev/zero of=/swapfile bs=1M count=500
+  when: common_enable_swap
+
+- name: mkswap /swapfile
+  shell: mkswap /swapfile
+  when: common_enable_swap
+
+- name: swapon /swapfile
+  shell: swapon /swapfile
+  when: common_enable_swap
+  notify:
+    - swapoff
+    - remove swapfile
+
+- name: swapon -s
+  shell: swapon -s
+  when: common_enable_swap
