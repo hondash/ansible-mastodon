@@ -17,7 +17,7 @@
     dest: "{{ mastodon_path }}"
     version: "{{ mastodon_version }}"
   environment:
-    PATH: "/opt/git/git-{{ git_version }}/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ git_install_path }}/bin:{{ ansible_env.PATH }}"
   become: yes
   become_user: "{{ user_name }}"
   tags: mastodon

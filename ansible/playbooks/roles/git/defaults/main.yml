@@ -1,3 +1,4 @@
 ---
 
 git_version: 2.16.3
+git_install_path: "/opt/git-{{ git_version }}"
