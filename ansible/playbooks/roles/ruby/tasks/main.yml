@@ -41,7 +41,7 @@
       path: ~/.bashrc
       block: |
         export PATH="$HOME/.rbenv/bin:$PATH"
-        {{ rbenv_init_result }}
+        {{ rbenv_init_result.stdout }}
   become: yes
   become_user: "{{ user_name }}"
   tags: ruby
