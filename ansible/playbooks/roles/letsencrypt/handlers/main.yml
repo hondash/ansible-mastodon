@@ -1,0 +1,9 @@
+---
+
+- name: Use webroot
+  when: not is_test
+  shell: "./certbot-auto certonly --webroot --domain {{ domain_name }} --webroot-path /home/mastodon/live/public/"
+  args:
+    chdir: "{{ letsencrypt_certbot_path }}"
+    creates: "/etc/letsencrypt/live/{{ domain_name }}"
+  tags: letsencrypt

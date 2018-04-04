@@ -1,0 +1,3 @@
+---
+
+letsencrypt_certbot_path: /opt/certbot
