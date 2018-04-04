@@ -11,7 +11,7 @@
 
 - name: Download tarball
   get_url:
-    url: "https://mirrors.edge.kernel.org/pub/software/scm/git/git-{{ git_version }}.tar.gz"
+    url: "https://github.com/git/git/archive/v{{ git_version }}.tar.gz"
     dest: "/var/tmp/git-{{ git_version }}.tar.gz"
 
 - name: Unarchive
