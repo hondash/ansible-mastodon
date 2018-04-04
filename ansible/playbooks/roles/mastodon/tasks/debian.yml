@@ -1,0 +1,84 @@
+---
+
+- name: Install dependencies
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - pkg-config          # gem install cld3
+    - libprotobuf-dev     #   "
+    - protobuf-compiler   #   "
+    - libicu-dev          # gem install charlock_holmes
+    - libidn11-dev        # gem install idn-ruby
+    - libpq-dev           # gem install pg
+  tags: mastodon
+    # - imagemagick
+    # - ffmpeg
+    # - redis-server
+    # - redis-tools
+    # libxml2-dev
+    # libxslt1-dev
+    # file
+    # g++
+    # gcc
+    # bison
+    # build-essential
+    # libssl-dev
+    # libyaml-dev
+    # libreadline6-dev
+    # zlib1g-dev
+    # libncurses5-dev
+    # libffi-dev
+    # libgdbm3
+    # libgdbm-dev
+    # nginx
+    # letsencrypt
+
+- name: git clone mastodon
+  git:
+    repo: https://github.com/tootsuite/mastodon.git
+    dest: "{{ mastodon_path }}"
+    version: "{{ mastodon_version }}"
+  environment:
+    PATH: "/opt/git/git-{{ git_version }}/bin:{{ ansible_env.PATH }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: mastodon
+
+- name: Instal bundler
+  gem:
+    name: bundler
+    user_install: no
+  environment:
+    PATH: "{{ ruby_rbenv_path }}/versions/{{ ruby_version }}/bin:{{ ansible_env.PATH }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: mastodon
+
+- name: getconf _NPROCESSORS_ONLN
+  shell: getconf _NPROCESSORS_ONLN
+  register: cpu_num
+  tags: mastodon
+
+- name: Install ruby dependencies
+  bundler:
+    deployment_mode: yes
+    exclude_groups:
+      - development
+      - test
+    extra_args: "-j{{ cpu_num.stdout }}"
+    chdir: "{{ mastodon_path }}"
+  environment:
+    PATH: "{{ ruby_rbenv_path }}/versions/{{ ruby_version }}/bin:{{ ansible_env.PATH }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: mastodon
+
+# no yarn module yet
+# @see https://github.com/ansible/ansible/pull/19026
+- name: Install node.js dependencies
+  shell: yarn install --pure-lockfile
+  args:
+    chdir: "/home/{{ user_name }}/live"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: mastodon
