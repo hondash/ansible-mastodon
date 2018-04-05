@@ -16,6 +16,65 @@
     - "{{ lower_os_family }}.yml"
   tags: mastodon
 
+- name: git clone mastodon
+  git:
+    repo: https://github.com/tootsuite/mastodon.git
+    dest: "{{ mastodon_path }}"
+    version: "{{ mastodon_version }}"
+  environment:
+    PATH: "{{ git_install_path }}/bin:{{ ansible_env.PATH }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: mastodon
+
+- name: Instal bundler
+  gem:
+    name: bundler
+    user_install: no
+  environment:
+    PATH: "{{ ruby_rbenv_path }}/versions/{{ ruby_version }}/bin:{{ ansible_env.PATH }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: mastodon
+
+- name: getconf _NPROCESSORS_ONLN
+  shell: getconf _NPROCESSORS_ONLN
+  register: cpu_num
+  tags: mastodon
+
+- name: bundle config
+  shell: "bundle config build.pg --with-pg-config={{ postgresql_path }}/bin/pg_config"
+  args:
+    chdir: "{{ mastodon_path }}"
+  environment:
+    PATH: "{{ ruby_rbenv_path }}/versions/{{ ruby_version }}/bin:{{ ansible_env.PATH }}"
+  become: yes
+  become_user: "{{ user_name }}"
+
+- name: Install ruby dependencies
+  bundler:
+    deployment_mode: yes
+    exclude_groups:
+      - development
+      - test
+    extra_args: "-j{{ cpu_num.stdout }}"
+    chdir: "{{ mastodon_path }}"
+  environment:
+    PATH: "{{ ruby_rbenv_path }}/versions/{{ ruby_version }}/bin:{{ ansible_env.PATH }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: mastodon
+
+# no yarn module yet
+# @see https://github.com/ansible/ansible/pull/19026
+- name: Install node.js dependencies
+  shell: yarn install --pure-lockfile
+  args:
+    chdir: "/home/{{ user_name }}/live"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: mastodon
+
 - name: Obtain SSL certificate
   when: not is_test
   shell: "./certbot-auto certonly --standalone --agree-tos --non-interactive --domain {{ domain_name }} --email {{ email }}"
@@ -33,7 +92,7 @@
 #     # validate: bash -c 'nginx -t -c /dev/stdin <<< "events {worker_connections 1;} http { include %s; }"'
 #   notify:
 #     - "Reload nginx"
-#   tags: nginx
+#   tags: mastodon
 
 - name: Add DB user
   when: ansible_virtualization_type != "docker"
@@ -44,4 +103,4 @@
     role_attr_flags: CREATEDB
   become: yes
   become_user: postgres
-  tags: postgresql
+  tags: mastodon
