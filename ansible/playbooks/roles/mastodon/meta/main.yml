@@ -1,6 +1,7 @@
 dependencies:
   - { role: user }
   - { role: git }
+  - { role: nginx }
   - { role: nodejs }
   - { role: yarn }
   - { role: ruby }
