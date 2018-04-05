@@ -24,4 +24,13 @@
     creates: "/etc/letsencrypt/live/{{ domain_name }}"
   tags: mastodon
 
-  # todo: add cron job
+# todo: add cron job
+
+# - name: Add conf.d config
+#   template:
+#     src: "mastodon.conf.j2"
+#     dest: "/etc/nginx/conf.d/mastodon.conf"
+#     # validate: bash -c 'nginx -t -c /dev/stdin <<< "events {worker_connections 1;} http { include %s; }"'
+#   notify:
+#     - "Reload nginx"
+#   tags: nginx
