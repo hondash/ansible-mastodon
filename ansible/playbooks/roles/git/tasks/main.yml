@@ -9,30 +9,24 @@
     - "{{ lower_os_family }}.yml"
   tags: git
 
-- name: Create directory
-  file:
-    path: /opt/git
-    state: directory
-  tags: git
-
 - name: Download tarball
   get_url:
-    url: "https://mirrors.edge.kernel.org/pub/software/scm/git/git-{{ git_version }}.tar.gz"
+    url: "https://github.com/git/git/archive/v{{ git_version }}.tar.gz"
     dest: "/var/tmp/git-{{ git_version }}.tar.gz"
 
 - name: Unarchive
   unarchive:
     src: "/var/tmp/git-{{ git_version }}.tar.gz"
-    dest: "/opt/git"
+    dest: "/opt"
     extra_opts:
       - "--no-same-owner"
     remote_src: yes
   tags: git
 
 - name: Install
-  shell: "make configure && ./configure --prefix=/opt/git/git-{{ git_version }} && make all && make install"
+  shell: "make configure && ./configure --prefix={{ git_install_path }} && make all && make install"
   args:
-    chdir: "/opt/git/git-{{ git_version }}"
+    chdir: "{{ git_install_path }}"
   tags: git
 
 - name: Set path
@@ -44,7 +38,7 @@
 - name: git --version
   shell: git --version
   environment:
-    PATH: "/opt/git/git-{{ git_version }}/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ git_install_path }}/bin:{{ ansible_env.PATH }}"
   register: git_installed_version
   tags: git
 

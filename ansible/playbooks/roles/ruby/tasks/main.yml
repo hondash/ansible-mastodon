@@ -14,7 +14,7 @@
     repo: https://github.com/rbenv/rbenv.git
     dest: "{{ ruby_rbenv_path }}"
   environment:
-    PATH: "/opt/git/git-{{ git_version }}/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ git_install_path }}/bin:{{ ansible_env.PATH }}"
   become: yes
   become_user: "{{ user_name }}"
   tags: ruby
@@ -52,7 +52,7 @@
     dest: "{{ ruby_rbenv_path }}/plugins/ruby-build"
     version: v20180329
   environment:
-    PATH: "/opt/git/git-{{ git_version }}/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ git_install_path }}/bin:{{ ansible_env.PATH }}"
   become: yes
   become_user: "{{ user_name }}"
   tags: ruby
@@ -74,11 +74,11 @@
 - name: "Check that ruby v{{ ruby_version }} is installed"
   stat:
     path: "{{ ruby_rbenv_path }}/versions/{{ ruby_version }}"
-  register: ruby_installed_dir
+  register: ruby_installed_path
   tags: ruby
 
 - name: Install ruby via rbenv
-  when: not ruby_installed_dir.stat.exists
+  when: not ruby_installed_path.stat.exists
   shell: "rbenv install {{ ruby_version }} && rbenv global {{ ruby_version }}"
   become: yes
   become_user: "{{ user_name }}"
