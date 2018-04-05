@@ -33,14 +33,3 @@
     enabled: yes
     state: started
   tags: postgresql
-
-- name: Add DB user
-  when: ansible_virtualization_type != "docker"
-  postgresql_user:
-    name: "{{ postgresql_user }}"
-    password: "{{ postgresql_user_password | password_hash('sha512') }}"
-    encrypted: yes
-    role_attr_flags: CREATEDB
-  become: yes
-  become_user: postgres
-  tags: postgresql
