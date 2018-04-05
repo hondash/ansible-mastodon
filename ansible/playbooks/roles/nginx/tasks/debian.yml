@@ -1,0 +1,18 @@
+---
+
+- name: Add nginx signing key
+  apt_key:
+    url: http://nginx.org/keys/nginx_signing.key
+  tags: nginx
+
+- name: Add nginx repository
+  template:
+    src: nginx.list.j2
+    dest: /etc/apt/sources.list.d/nginx.list
+  tags: nginx
+
+- name: Install nginx
+  apt:
+    name: nginx
+    update_cache: yes
+  tags: nginx

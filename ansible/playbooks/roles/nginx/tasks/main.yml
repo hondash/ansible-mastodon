@@ -1,0 +1,37 @@
+---
+
+- name: "Include tasks"
+  include_role:
+    name: nginx
+    tasks_from: "{{ item }}"
+  with_first_found:
+    - "{{ lower_distribution }}.yml"
+    - "{{ lower_os_family }}.yml"
+  tags: nginx
+
+# - name: Add conf.d config
+#   template:
+#     src: "mastodon.conf.j2"
+#     dest: "/etc/nginx/conf.d/mastodon.conf"
+#     # validate: bash -c 'nginx -t -c /dev/stdin <<< "events {worker_connections 1;} http { include %s; }"'
+#   notify:
+#     - "Reload nginx"
+#   tags: nginx
+
+- name: Start nginx
+  when: ansible_virtualization_type != "docker"
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes
+  tags: nginx
+
+- name: nginx -V
+  shell: nginx -V
+  register: nginx_installed_version
+  tags: nginx
+
+- name: Installed version
+  debug:
+    msg: "installed: {{ nginx_installed_version.stdout }}"
+  tags: nginx

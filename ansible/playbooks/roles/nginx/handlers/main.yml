@@ -1,0 +1,8 @@
+---
+
+- name: Reload nginx
+  when: ansible_virtualization_type != "docker"
+  systemd:
+    name: nginx
+    state: reloaded
+  tags: nginx
