@@ -15,3 +15,13 @@
     - "{{ lower_distribution }}.yml"
     - "{{ lower_os_family }}.yml"
   tags: mastodon
+
+- name: Obtain SSL certificate
+  when: not is_test
+  shell: "./certbot-auto certonly --standalone --agree-tos --non-interactive --domain {{ domain_name }} --email {{ email }}"
+  args:
+    chdir: "{{ letsencrypt_certbot_path }}"
+    creates: "/etc/letsencrypt/live/{{ domain_name }}"
+  tags: mastodon
+
+  # todo: add cron job
