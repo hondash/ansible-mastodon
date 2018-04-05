@@ -1,0 +1,24 @@
+---
+
+- name: Create directory
+  file:
+    path: /opt/certbot
+    state: directory
+  tags: letsencrypt
+
+- name: Download certbot
+  get_url:
+    url: https://dl.eff.org/certbot-auto
+    dest: "{{ letsencrypt_certbot_path }}/certbot-auto"
+    mode: a+x
+  tags: letsencrypt
+
+- name: Obtain certificate
+  when: not is_test
+  shell: "./certbot-auto certonly --standalone --agree-tos --non-interactive --domain {{ domain_name }} --email {{ email }}"
+  args:
+    chdir: "{{ letsencrypt_certbot_path }}"
+    creates: "/etc/letsencrypt/live/{{ domain_name }}"
+  tags: letsencrypt
+
+# todo: add cron job
