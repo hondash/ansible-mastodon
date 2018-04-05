@@ -43,7 +43,7 @@
   tags: mastodon
 
 - name: bundle config
-  shell: "bundle config build.pg --with-pg-config={{ postgresql_path }}/bin/pg_config"
+  shell: "bundle config build.pg --with-pg-config={{ postgresql_pg_config_path }}/bin/pg_config"
   args:
     chdir: "{{ mastodon_path }}"
   environment:

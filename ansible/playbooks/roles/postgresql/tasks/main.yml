@@ -19,7 +19,7 @@
 - name: postgres --version
   shell: postgres --version
   environment:
-    PATH: "{{ postgresql_path }}/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ postgresql_postgres_path }}/bin:{{ ansible_env.PATH }}"
   register: postgresql_installed_version
   tags: postgresql
 

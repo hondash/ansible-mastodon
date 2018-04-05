@@ -1,3 +1,4 @@
 ---
 
-postgresql_path: /usr/lib/postgresql/10
+postgresql_postgres_path: /usr/lib/postgresql/10
+postgresql_pg_config_path: /usr
