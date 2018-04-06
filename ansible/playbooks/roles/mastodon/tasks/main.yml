@@ -1,12 +1,5 @@
 ---
 
-# - name: "Include {{ ansible_distribution }} vars"
-#   include_vars: "{{ item }}"
-#   with_first_found:
-#     - "{{ lower_distribution }}.yml"
-#     - "{{ lower_os_family }}.yml"
-#   tags: mastodon
-
 - name: Include tasks
   include_role:
     name: mastodon
@@ -75,24 +68,32 @@
   become_user: "{{ user_name }}"
   tags: mastodon
 
-- name: Obtain SSL certificate
-  when: not is_test
-  shell: "./certbot-auto certonly --standalone --agree-tos --non-interactive --domain {{ domain_name }} --email {{ email }}"
-  args:
-    chdir: "{{ letsencrypt_certbot_path }}"
-    creates: "/etc/letsencrypt/live/{{ domain_name }}"
+- name: Add nginx config
+  template:
+    src: mastodon.conf.j2
+    dest: /etc/nginx/conf.d/mastodon.conf
+    validate: bash -c 'nginx -t -c /dev/stdin <<< "events {worker_connections 1;} http { include %s; }"'
+  notify:
+    - "Reload nginx"
   tags: mastodon
 
-# todo: add cron job
+- name: Obtain SSL certificate
+  when: not is_test
+  shell: "./certbot-auto certonly --webroot --domain {{ domain_name }} --webroot-path /home/{{ user_name }}/live/public/"
+  args:
+    chdir: "{{ letsencrypt_certbot_path }}"
+    # creates: "/etc/letsencrypt/live/{{ domain_name }}"
+  notify:
+    - "Reload nginx"
+  tags: mastodon
 
-# - name: Add conf.d config
-#   template:
-#     src: "mastodon.conf.j2"
-#     dest: "/etc/nginx/conf.d/mastodon.conf"
-#     # validate: bash -c 'nginx -t -c /dev/stdin <<< "events {worker_connections 1;} http { include %s; }"'
-#   notify:
-#     - "Reload nginx"
-#   tags: mastodon
+- name: Create cron job
+  when: not is_test
+  template:
+    src: letsencrypt-renew.sh.j2
+    dest: /etc/cron.daily/letsencrypt-renew.sh
+    mode: u+x
+  tags: mastodon
 
 - name: Add DB user
   when: ansible_virtualization_type != "docker"

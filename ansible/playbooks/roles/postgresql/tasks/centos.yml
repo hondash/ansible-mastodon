@@ -21,7 +21,7 @@
 
 - name: Setup database
   when: ansible_virtualization_type != "docker"
-  shell: "{{ postgresql_path }}/bin/postgresql-10-setup initdb"
+  shell: "{{ postgresql_postgres_path }}/bin/postgresql-10-setup initdb"
   args:
     creates: /var/lib/pgsql/10/data/postgresql.conf
   tags: postgresql

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+{{ letsencrypt_certbot_path }}/certbot-auto renew
+systemctl reload nginx
