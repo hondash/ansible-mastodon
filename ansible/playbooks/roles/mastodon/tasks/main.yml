@@ -88,6 +88,7 @@
   tags: mastodon
 
 - name: Create cron job
+  when: not is_test
   template:
     src: letsencrypt-renew.sh.j2
     dest: /etc/cron.daily/letsencrypt-renew.sh
