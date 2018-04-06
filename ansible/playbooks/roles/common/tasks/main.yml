@@ -34,7 +34,6 @@
   when: common_enable_swap
   notify:
     - swapoff
-    - remove swapfile
 
 - name: swapon -s
   shell: swapon -s
