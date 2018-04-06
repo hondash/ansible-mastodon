@@ -23,8 +23,8 @@ server {
   ssl_prefer_server_ciphers on;
   ssl_session_cache shared:SSL:10m;
 
-  ssl_certificate     /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
+#  ssl_certificate     /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
+#  ssl_certificate_key /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
 
   keepalive_timeout    70;
   sendfile             on;

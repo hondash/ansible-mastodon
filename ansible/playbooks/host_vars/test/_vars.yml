@@ -2,3 +2,4 @@
 
 is_test: true
 postgresql_user_password: test_password
+domain_name: example.com
