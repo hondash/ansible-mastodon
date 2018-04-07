@@ -22,7 +22,6 @@ Vagrant.configure("2") do |config|
       "test:vars" => {
         "common_enable_swap": "true",
         "domain_name": "example.com",
-        "email": "xxx@example.com",
         "is_test": "true",
         "postgresql_user_password": "test_password"
       }
