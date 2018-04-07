@@ -9,6 +9,14 @@
     - "{{ lower_os_family }}.yml"
   tags: mastodon
 
+- name: Start redis
+  when: ansible_virtualization_type != "docker"
+  systemd:
+    name: redis
+    enabled: yes
+    state: started
+  tags: mastodon
+
 - name: git clone mastodon
   git:
     repo: https://github.com/tootsuite/mastodon.git
@@ -105,3 +113,26 @@
   become: yes
   become_user: postgres
   tags: mastodon
+
+- name: Add mastodon systemd services
+  template:
+    src: "etc/systemd/system/{{ item }}.j2"
+    dest: "/etc/systemd/system/{{ item }}"
+  with_items:
+    - mastodon-web.service
+    - mastodon-sidekiq.service
+    - mastodon-streaming.service
+
+- name: Add cron env
+  when: not is_test
+  cron:
+    name: RAILS_ENV
+    env: yes
+    value: production
+
+- name: Add cron
+  when: not is_test
+  cron:
+    name: Remote media attachment cache cleanup
+    special_time: daily
+    job: "cd /home/mastodon/live && /home/mastodon/.rbenv/shims/bundle exec rake mastodon:media:remove_remote"

@@ -1,12 +1,30 @@
 ---
 
+- name: Add EPEL repository
+  yum_repository:
+    name: epel
+    description: EPEL yum repo
+    enabled: no
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    gpgkey: https://archive.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
+  tags: mastodon
+
+- name: Add RPM Fusion free repository
+  yum:
+    name: https://download1.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm
+
 - name: Install dependencies
   yum:
     name: "{{ item }}"
+    enablerepo: epel
   with_items:
-    - protobuf-devel        # gem install cld3
-    - libicu-devel          # gem install charlock_holmes
+    - ImageMagick           # for image processing
+    - ffmpeg                # for movie processing
+    - redis                 # for redis
+    - protobuf-devel        # for gem install cld3
+    - libicu-devel          # for gem install charlock_holmes
     - gcc                   #   "
     - gcc-c++               #   "
-    - libidn-devel          # gem install idn-ruby
-    - postgresql10-devel    # gem install pg
+    - libidn-devel          # for gem install idn-ruby
+    - postgresql10-devel    # for gem install pg
+  tags: mastodon

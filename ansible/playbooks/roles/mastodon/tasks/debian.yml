@@ -4,6 +4,8 @@
   apt:
     name: "{{ item }}"
   with_items:
+    - redis-server        # redis
+    - redis-tools         #   "
     - pkg-config          # gem install cld3
     - libprotobuf-dev     #   "
     - protobuf-compiler   #   "
@@ -13,8 +15,6 @@
   tags: mastodon
     # - imagemagick
     # - ffmpeg
-    # - redis-server
-    # - redis-tools
     # libxml2-dev
     # libxslt1-dev
     # file
