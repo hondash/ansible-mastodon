@@ -22,20 +22,25 @@
   shell: free -m
   notify:
     - swapoff
+  tags: common
 
 - name: swapon -s
   when: common_enable_swap
   shell: swapon -s
   register: common_exist_swap
+  tags: common
 
 - name: dd if=/dev/zero of=/swapfile bs=1M count=500
   when: "common_enable_swap and '/swapfile' not in common_exist_swap.stdout"
   shell: dd if=/dev/zero of=/swapfile bs=1M count=500
+  tags: common
 
 - name: mkswap /swapfile
   when: "common_enable_swap and '/swapfile' not in common_exist_swap.stdout"
   shell: mkswap /swapfile
+  tags: common
 
 - name: swapon /swapfile
   when: "common_enable_swap and '/swapfile' not in common_exist_swap.stdout"
   shell: swapon /swapfile
+  tags: common
