@@ -2,7 +2,9 @@
 
 - name: Install dependencies
   apt:
-    name: "{{ item }}"
+    name: "{{ ruby_install_dependency }}"
   with_items:
     - libreadline-dev
+  loop_control:
+    loop_var: ruby_install_dependency
   tags: ruby

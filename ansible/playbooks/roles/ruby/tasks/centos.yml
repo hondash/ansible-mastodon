@@ -2,8 +2,10 @@
 
 - name: Install dependencies
   yum:
-    name: "{{ item }}"
+    name: "{{ ruby_install_dependency }}"
   with_items:
     - bzip2
     - readline-devel
+  loop_control:
+    loop_var: ruby_install_dependency
   tags: ruby
