@@ -29,13 +29,13 @@
   register: common_exist_swap
 
 - name: dd if=/dev/zero of=/swapfile bs=1M count=500
-  when: "common_enable_swap and not '/swapfile' in common_exist_swap.stdout"
+  when: "common_enable_swap and '/swapfile' not in common_exist_swap.stdout"
   shell: dd if=/dev/zero of=/swapfile bs=1M count=500
 
 - name: mkswap /swapfile
-  when: "common_enable_swap and not '/swapfile' in common_exist_swap.stdout"
+  when: "common_enable_swap and '/swapfile' not in common_exist_swap.stdout"
   shell: mkswap /swapfile
 
 - name: swapon /swapfile
-  when: "common_enable_swap and not '/swapfile' in common_exist_swap.stdout"
+  when: "common_enable_swap and '/swapfile' not in common_exist_swap.stdout"
   shell: swapon /swapfile
