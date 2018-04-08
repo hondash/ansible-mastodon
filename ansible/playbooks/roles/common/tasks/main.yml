@@ -20,21 +20,22 @@
 - name: free -m
   when: common_enable_swap
   shell: free -m
-
-- name: dd if=/dev/zero of=/swapfile bs=1M count=500
-  shell: dd if=/dev/zero of=/swapfile bs=1M count=500
-  when: common_enable_swap
-
-- name: mkswap /swapfile
-  shell: mkswap /swapfile
-  when: common_enable_swap
-
-- name: swapon /swapfile
-  shell: swapon /swapfile
-  when: common_enable_swap
   notify:
     - swapoff
 
 - name: swapon -s
-  shell: swapon -s
   when: common_enable_swap
+  shell: swapon -s
+  register: common_exist_swap
+
+- name: dd if=/dev/zero of=/swapfile bs=1M count=500
+  when: "common_enable_swap and not '/swapfile' in common_exist_swap.stdout"
+  shell: dd if=/dev/zero of=/swapfile bs=1M count=500
+
+- name: mkswap /swapfile
+  when: "common_enable_swap and not '/swapfile' in common_exist_swap.stdout"
+  shell: mkswap /swapfile
+
+- name: swapon /swapfile
+  when: "common_enable_swap and not '/swapfile' in common_exist_swap.stdout"
+  shell: swapon /swapfile
