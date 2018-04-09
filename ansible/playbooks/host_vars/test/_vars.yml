@@ -1,5 +1,6 @@
 ---
-
+common_enable_swap: false
+domain_name: example.com
+email: admin@example.com
 is_test: true
 postgresql_user_password: test_password
-domain_name: example.com

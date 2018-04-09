@@ -15,7 +15,7 @@
 
 - name: Install dependencies
   yum:
-    name: "{{ item }}"
+    name: "{{ mastodon_install_dependency }}"
     enablerepo: epel
   with_items:
     - ImageMagick           # for image processing
@@ -27,4 +27,6 @@
     - gcc-c++               #   "
     - libidn-devel          # for gem install idn-ruby
     - postgresql10-devel    # for gem install pg
+  loop_control:
+    loop_var: mastodon_install_dependency
   tags: mastodon

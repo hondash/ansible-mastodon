@@ -76,7 +76,14 @@
   become_user: "{{ user_name }}"
   tags: mastodon
 
+- name: Check that ssl certificate exists
+  stat:
+    path: "/etc/letsencrypt/live/{{ domain_name }}"
+  register: mastodon_certificate
+  tags: mastodon
+
 - name: Add nginx config
+  when: not mastodon_certificate.stat.exists
   template:
     src: mastodon.conf.j2
     dest: /etc/nginx/conf.d/mastodon.conf
@@ -87,10 +94,17 @@
 
 - name: Obtain SSL certificate
   when: not is_test
-  shell: "./certbot-auto certonly --webroot --domain {{ domain_name }} --webroot-path /home/{{ user_name }}/live/public/"
+  shell: "./certbot-auto certonly --agree-tos --webroot --domain {{ domain_name }} --email {{ email }} --webroot-path /home/{{ user_name }}/live/public/"
   args:
     chdir: "{{ letsencrypt_certbot_path }}"
-    # creates: "/etc/letsencrypt/live/{{ domain_name }}"
+    creates: "/etc/letsencrypt/live/{{ domain_name }}"
+  tags: mastodon
+
+- name: Remove comment out of mastodon.conf
+  replace:
+    path: /etc/nginx/conf.d/mastodon.conf
+    regexp: '^#(\s+)ssl_certificate(.*)$'
+    replace: '\1ssl_certificate\2'
   notify:
     - "Reload nginx"
   tags: mastodon
@@ -101,6 +115,8 @@
     src: letsencrypt-renew.sh.j2
     dest: /etc/cron.daily/letsencrypt-renew.sh
     mode: u+x
+  notify:
+    - Restart cron
   tags: mastodon
 
 - name: Add DB user
@@ -122,6 +138,9 @@
     - mastodon-web.service
     - mastodon-sidekiq.service
     - mastodon-streaming.service
+  notify:
+    - Daemon reload
+  tags: mastodon
 
 - name: Add cron env
   when: not is_test
@@ -129,6 +148,7 @@
     name: RAILS_ENV
     env: yes
     value: production
+  tags: mastodon
 
 - name: Add cron
   when: not is_test
@@ -136,3 +156,6 @@
     name: Remote media attachment cache cleanup
     special_time: daily
     job: "cd /home/mastodon/live && /home/mastodon/.rbenv/shims/bundle exec rake mastodon:media:remove_remote"
+  notify:
+    - Restart cron
+  tags: mastodon
