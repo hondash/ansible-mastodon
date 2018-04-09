@@ -79,11 +79,20 @@
 
 - name: Install ruby via rbenv
   when: not ruby_installed_path.stat.exists
-  shell: "rbenv install {{ ruby_version }} && rbenv global {{ ruby_version }}"
+  shell: "rbenv install {{ ruby_version }}"
   become: yes
   become_user: "{{ user_name }}"
   environment:
     RUBY_CONFIGURE_OPTS: "--disable-install-doc"
+    PATH: "{{ ruby_rbenv_path }}/bin:{{ ansible_env.PATH }}"
+  tags: ruby
+
+- name: Set global ruby
+  when: not ruby_installed_path.stat.exists
+  shell: "rbenv global {{ ruby_version }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  environment:
     PATH: "{{ ruby_rbenv_path }}/bin:{{ ansible_env.PATH }}"
   tags: ruby
 

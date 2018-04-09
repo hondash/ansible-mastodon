@@ -23,8 +23,26 @@
     remote_src: yes
   tags: git
 
-- name: Install
-  shell: "make configure && ./configure --prefix={{ git_install_path }} && make all && make install"
+- name: make configure
+  shell: make configure
+  args:
+    chdir: "{{ git_install_path }}"
+  tags: git
+
+- name: "./configure --prefix={{ git_install_path }}"
+  shell: "./configure --prefix={{ git_install_path }}"
+  args:
+    chdir: "{{ git_install_path }}"
+  tags: git
+
+- name: make all
+  shell: make all
+  args:
+    chdir: "{{ git_install_path }}"
+  tags: git
+
+- name: make install
+  shell: make install
   args:
     chdir: "{{ git_install_path }}"
   tags: git
