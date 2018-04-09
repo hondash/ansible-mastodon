@@ -8,6 +8,8 @@
 
 - name: Install packages
   yum:
-    name: "{{ item }}"
+    name: "{{ common_install_package }}"
   with_items: "{{ common_install_packages }}"
+  loop_control:
+    loop_var: common_install_package
   tags: common

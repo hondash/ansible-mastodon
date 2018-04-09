@@ -17,12 +17,12 @@
     enabled: yes
   tags: nginx
 
-- name: nginx -V
-  shell: nginx -V
+- name: nginx -v
+  shell: nginx -v
   register: nginx_installed_version
   tags: nginx
 
 - name: Installed version
   debug:
-    msg: "installed: {{ nginx_installed_version.stdout }}"
+    msg: "installed: {{ nginx_installed_version.stderr }}"
   tags: nginx

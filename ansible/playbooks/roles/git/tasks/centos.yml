@@ -2,7 +2,7 @@
 
 - name: Install dependencies
   yum:
-    name: "{{ item }}"
+    name: "{{ git_install_dependency }}"
   with_items:
     - autoconf
     - curl-devel
@@ -12,4 +12,6 @@
     - openssl-devel
     - perl-devel
     - zlib-devel
+  loop_control:
+    loop_var: git_install_dependency
   tags: git

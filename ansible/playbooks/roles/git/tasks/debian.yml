@@ -2,7 +2,7 @@
 
 - name: Install dependencies
   apt:
-    name: "{{ item }}"
+    name: "{{ git_install_dependency }}"
   with_items:
     - autoconf
     - build-essential
@@ -11,4 +11,6 @@
     - libexpat1-dev
     - libssl-dev
     - libz-dev
+  loop_control:
+    loop_var: git_install_dependency
   tags: git
