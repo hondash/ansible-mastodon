@@ -2,7 +2,7 @@
 
 - name: Install dependencies
   apt:
-    name: "{{ item }}"
+    name: "{{ mastodon_install_dependency }}"
   with_items:
     - redis-server        # redis
     - redis-tools         #   "
@@ -12,6 +12,8 @@
     - libicu-dev          # gem install charlock_holmes
     - libidn11-dev        # gem install idn-ruby
     - libpq-dev           # gem install pg
+  loop_control:
+    loop_var: mastodon_install_dependency
   tags: mastodon
     # - imagemagick
     # - ffmpeg
