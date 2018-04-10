@@ -28,7 +28,7 @@
   become_user: "{{ user_name }}"
   tags: mastodon
 
-- name: Instal bundler
+- name: Install bundler
   gem:
     name: bundler
     user_install: no
