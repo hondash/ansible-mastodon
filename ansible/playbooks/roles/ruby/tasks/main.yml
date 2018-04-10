@@ -71,24 +71,18 @@
     var: ruby_available_versions.stdout_lines
   tags: ruby
 
-- name: "Check that ruby v{{ ruby_version }} is installed"
-  stat:
-    path: "{{ ruby_rbenv_path }}/versions/{{ ruby_version }}"
-  register: ruby_installed_path
-  tags: ruby
-
 - name: Install ruby via rbenv
-  when: not ruby_installed_path.stat.exists
   shell: "rbenv install {{ ruby_version }}"
   become: yes
   become_user: "{{ user_name }}"
   environment:
     RUBY_CONFIGURE_OPTS: "--disable-install-doc"
     PATH: "{{ ruby_rbenv_path }}/bin:{{ ansible_env.PATH }}"
+  register: ruby_install_result
+  failed_when: "ruby_install_result.rc != 0 and 'already exists' not in ruby_install_result.stderr"
   tags: ruby
 
 - name: Set global ruby
-  when: not ruby_installed_path.stat.exists
   shell: "rbenv global {{ ruby_version }}"
   become: yes
   become_user: "{{ user_name }}"
