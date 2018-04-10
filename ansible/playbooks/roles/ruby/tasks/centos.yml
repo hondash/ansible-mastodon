@@ -5,7 +5,14 @@
     name: "{{ ruby_install_dependency }}"
   with_items:
     - bzip2
+    - gcc
+    - gdbm-devel
+    - libffi-devel
+    - libyaml-devel
+    - ncurses-devel
+    - openssl-devel
     - readline-devel
+    - zlib-devel
   loop_control:
     loop_var: ruby_install_dependency
   tags: ruby
