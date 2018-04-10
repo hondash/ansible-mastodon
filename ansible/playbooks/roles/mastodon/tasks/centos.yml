@@ -18,15 +18,20 @@
     name: "{{ mastodon_install_dependency }}"
     enablerepo: epel
   with_items:
-    - ImageMagick           # for image processing
-    - ffmpeg                # for movie processing
-    - redis                 # for redis
-    - protobuf-devel        # for gem install cld3
-    - libicu-devel          # for gem install charlock_holmes
+    - ImageMagick           # image processing
+    - ffmpeg                # movie processing
+    - file                  # @see https://github.com/tootsuite/mastodon/pull/868
+    - libxml2               # RubyGems nokogiri
+    - libxml2-devel         #   "
+    - libxslt               #   "
+    - libxslt-devel         #   "
+    - redis                 # redis
+    - protobuf-devel        # RubyGems cld3
+    - libicu-devel          # RubyGems charlock_holmes
     - gcc                   #   "
     - gcc-c++               #   "
-    - libidn-devel          # for gem install idn-ruby
-    - postgresql10-devel    # for gem install pg
+    - libidn-devel          # RubyGems idn-ruby
+    - postgresql10-devel    # RubyGems pg
   loop_control:
     loop_var: mastodon_install_dependency
   tags: mastodon
