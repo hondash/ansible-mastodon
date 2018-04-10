@@ -3,4 +3,5 @@
 - name: Add user
   user:
     name: "{{ user_name }}"
+    shell: /bin/bash
   tags: user
