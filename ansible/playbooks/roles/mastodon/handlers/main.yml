@@ -1,11 +1,13 @@
 ---
 
 - name: Daemon reload
+  when: ansible_virtualization_type != "docker"
   systemd:
     daemon_reload: yes
   tags: mastodon
 
 - name: Restart cron
+  when: ansible_virtualization_type != "docker"
   systemd:
     name: cron
     state: restarted
