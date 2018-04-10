@@ -4,16 +4,20 @@
   apt:
     name: "{{ mastodon_install_dependency }}"
   with_items:
-    - imagemagick         # for image processing
-    - ffmpeg              # for movie processing
+    - imagemagick         # image processing
+    - ffmpeg              # movie processing
+    - file                # @see https://github.com/tootsuite/mastodon/pull/868
+    - libxml2             # RubyGems nokogiri
+    - libxml2-dev         #   "
+    - libxslt1-dev        #   "
     - redis-server        # redis
     - redis-tools         #   "
-    - pkg-config          # gem install cld3
+    - pkg-config          # RubyGems cld3
     - libprotobuf-dev     #   "
     - protobuf-compiler   #   "
-    - libicu-dev          # gem install charlock_holmes
-    - libidn11-dev        # gem install idn-ruby
-    - libpq-dev           # gem install pg
+    - libicu-dev          # RubyGems charlock_holmes
+    - libidn11-dev        # RubyGems idn-ruby
+    - libpq-dev           # RubyGems pg
   loop_control:
     loop_var: mastodon_install_dependency
   tags: mastodon
