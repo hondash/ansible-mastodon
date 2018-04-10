@@ -4,7 +4,17 @@
   apt:
     name: "{{ ruby_install_dependency }}"
   with_items:
+    - autoconf
+    - bison
+    - build-essential
+    - libffi-dev
+    - libgdbm3
+    - libgdbm-dev
+    - libncurses5-dev
     - libreadline-dev
+    - libssl-dev
+    - libyaml-dev
+    - zlib1g-dev
   loop_control:
     loop_var: ruby_install_dependency
   tags: ruby
