@@ -4,6 +4,8 @@
   apt:
     name: "{{ mastodon_install_dependency }}"
   with_items:
+    - imagemagick         # for image processing
+    - ffmpeg              # for movie processing
     - redis-server        # redis
     - redis-tools         #   "
     - pkg-config          # gem install cld3
@@ -15,20 +17,3 @@
   loop_control:
     loop_var: mastodon_install_dependency
   tags: mastodon
-    # - imagemagick
-    # - ffmpeg
-    # libxml2-dev
-    # libxslt1-dev
-    # file
-    # g++
-    # gcc
-    # bison
-    # build-essential
-    # libssl-dev
-    # libyaml-dev
-    # libreadline6-dev
-    # zlib1g-dev
-    # libncurses5-dev
-    # libffi-dev
-    # libgdbm3
-    # libgdbm-dev
