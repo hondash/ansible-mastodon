@@ -26,3 +26,9 @@ RAILS_ENV=production bundle exec rake mastodon:setup
 ```
 
 See also https://github.com/tootsuite/documentation/blob/master/Running-Mastodon/Production-guide.md
+
+Finally, Start mastodon services.
+
+```sh
+systemctl start mastodon-{web,sidekiq,streaming}
+```
