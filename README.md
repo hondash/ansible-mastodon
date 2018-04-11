@@ -1,6 +1,8 @@
 # ansible-mastodon
 
-Install ansible
+Install ansible  
+http://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html?
+
 
 Add remote host configuration to `ansible/inventories/hosts.yml`  
 see http://docs.ansible.com/ansible/devel/user_guide/intro_inventory.html for more details 
@@ -17,18 +19,17 @@ cd ansible
 ansible-playbook playbooks/mastodon-setup.yml -l HOST_NAME --extra-vars '{ "domain_name":"DOMAIN_NAME", "postgresql_user_password": "PASSWORD", "email": "EMAIL" }'
 ```
 
-After execute ansible-playbook, login remote host via ssh.  
-Then execute following commands as mastodon user.
+Login remote host via ssh then execute following commands as mastodon user.
 
 ```sh
 cd ~/live
 RAILS_ENV=production bundle exec rake mastodon:setup
 ```
 
-See also https://github.com/tootsuite/documentation/blob/master/Running-Mastodon/Production-guide.md
-
-Finally, Start mastodon services.
+Start mastodon services.
 
 ```sh
 systemctl start mastodon-{web,sidekiq,streaming}
 ```
+
+See also https://github.com/tootsuite/documentation/blob/master/Running-Mastodon/Production-guide.md
