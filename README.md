@@ -1,11 +1,11 @@
 # ansible-mastodon
 
-Install ansible  
-http://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
+Install ansible.  
+see http://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
 
 
-Add remote host configuration to `ansible/inventories/hosts.yml`  
-see http://docs.ansible.com/ansible/devel/user_guide/intro_inventory.html for more details 
+Add remote host configuration to `ansible/inventories/hosts.yml`
+see http://docs.ansible.com/ansible/devel/user_guide/intro_inventory.html for more details.
 
 After replace `HOST_NAME`, `DOMAIN_NAME`, `PASSWORD` and `EMAIL`, then execute following commands.
 
