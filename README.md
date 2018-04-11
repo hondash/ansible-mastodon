@@ -1,7 +1,7 @@
 # ansible-mastodon
 
 Install ansible  
-http://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html?
+http://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
 
 
 Add remote host configuration to `ansible/inventories/hosts.yml`  
