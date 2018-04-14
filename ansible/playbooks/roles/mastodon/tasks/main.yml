@@ -132,14 +132,24 @@
 
 - name: Add mastodon systemd services
   template:
-    src: "etc/systemd/system/{{ item }}.j2"
-    dest: "/etc/systemd/system/{{ item }}"
-  with_items:
+    src: "etc/systemd/system/{{ mastodon_service }}.j2"
+    dest: "/etc/systemd/system/{{ mastodon_service }}"
+  with_items: &mastodon_services
     - mastodon-web.service
     - mastodon-sidekiq.service
     - mastodon-streaming.service
+  loop_control:
+    loop_var: mastodon_service
   notify:
     - Daemon reload
+  tags: mastodon
+
+- name: Set mastodon services enabled
+  when: ansible_virtualization_type != "docker"
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+  with_items: *mastodon_services
   tags: mastodon
 
 - name: Add cron env
