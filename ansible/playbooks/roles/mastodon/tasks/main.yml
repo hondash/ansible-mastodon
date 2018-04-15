@@ -106,7 +106,7 @@
     regexp: '^#(\s+)ssl_certificate(.*)$'
     replace: '\1ssl_certificate\2'
   notify:
-    - "Reload nginx"
+    - Reload nginx
   tags: mastodon
 
 - name: Create cron job
