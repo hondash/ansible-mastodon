@@ -88,8 +88,13 @@
     src: mastodon.conf.j2
     dest: /etc/nginx/conf.d/mastodon.conf
     validate: bash -c 'nginx -t -c /dev/stdin <<< "events {worker_connections 1;} http { include %s; }"'
-  notify:
-    - "Reload nginx"
+  tags: mastodon
+
+- name: Reload nginx
+  when: ansible_virtualization_type != "docker"
+  systemd:
+    name: nginx
+    state: reloaded
   tags: mastodon
 
 - name: Obtain SSL certificate
@@ -106,7 +111,7 @@
     regexp: '^#(\s+)ssl_certificate(.*)$'
     replace: '\1ssl_certificate\2'
   notify:
-    - "Reload nginx"
+    - Reload nginx
   tags: mastodon
 
 - name: Create cron job
