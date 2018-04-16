@@ -33,6 +33,12 @@
   shell: "dd if=/dev/zero of=/swapfile bs=1M count={{ swap_size }}"
   tags: common
 
+- name: Set permission 0600
+  when: "enable_swap and '/swapfile' not in common_exist_swap.stdout"
+  file:
+    path: /swapfile
+    mode: 0600
+
 - name: mkswap /swapfile
   when: "enable_swap and '/swapfile' not in common_exist_swap.stdout"
   shell: mkswap /swapfile
