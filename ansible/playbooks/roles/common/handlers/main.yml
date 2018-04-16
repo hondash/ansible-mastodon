@@ -1,7 +1,1 @@
 ---
-
-- name: swapoff
-  when: "'/swapfile' in common_exist_swap.stdout"
-  shell: swapoff /swapfile
-  listen: "disable swap"
-  tags: common
