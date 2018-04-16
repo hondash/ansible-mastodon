@@ -16,31 +16,29 @@
     - "{{ lower_os_family }}.yml"
   tags: common
 
-# If tasks fail because of out of memory, use 'common_enable_swap' variable to true
+# If tasks fail because of out of memory, use 'enable_swap' variable to true
 - name: free -m
-  when: common_enable_swap
+  when: enable_swap
   shell: free -m
-  notify:
-    - swapoff
   tags: common
 
 - name: swapon -s
-  when: common_enable_swap
+  when: enable_swap
   shell: swapon -s
   register: common_exist_swap
   tags: common
 
-- name: dd if=/dev/zero of=/swapfile bs=1M count=500
-  when: "common_enable_swap and '/swapfile' not in common_exist_swap.stdout"
-  shell: dd if=/dev/zero of=/swapfile bs=1M count=500
+- name: "dd if=/dev/zero of=/swapfile bs=1M count={{ swap_size }}"
+  when: "enable_swap and '/swapfile' not in common_exist_swap.stdout"
+  shell: "dd if=/dev/zero of=/swapfile bs=1M count={{ swap_size }}"
   tags: common
 
 - name: mkswap /swapfile
-  when: "common_enable_swap and '/swapfile' not in common_exist_swap.stdout"
+  when: "enable_swap and '/swapfile' not in common_exist_swap.stdout"
   shell: mkswap /swapfile
   tags: common
 
 - name: swapon /swapfile
-  when: "common_enable_swap and '/swapfile' not in common_exist_swap.stdout"
+  when: "enable_swap and '/swapfile' not in common_exist_swap.stdout"
   shell: swapon /swapfile
   tags: common
