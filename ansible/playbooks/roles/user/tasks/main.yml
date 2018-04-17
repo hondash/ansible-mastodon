@@ -5,3 +5,10 @@
     name: "{{ user_name }}"
     shell: /bin/bash
   tags: user
+
+- name: Change mode to 0755
+  file:
+    path: "/home/{{ user_name }}"
+    state: directory
+    mode: 0755
+  tags: user
