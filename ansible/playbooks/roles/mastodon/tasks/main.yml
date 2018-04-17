@@ -1,5 +1,12 @@
 ---
 
+- name: "Include {{ ansible_distribution }} vars"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ lower_distribution }}.yml"
+    - "{{ lower_os_family }}.yml"
+  tags: mastodon
+
 - name: Include tasks
   include_role:
     name: mastodon
