@@ -1,5 +1,12 @@
 ---
 
+- name: "Include {{ ansible_distribution }} vars"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ lower_distribution }}.yml"
+    - "{{ lower_os_family }}.yml"
+  tags: mastodon
+
 - name: Include tasks
   include_role:
     name: mastodon
@@ -99,7 +106,7 @@
 
 - name: Obtain SSL certificate
   when: not is_test
-  shell: "./certbot-auto certonly --agree-tos --webroot --domain {{ domain_name }} --email {{ email }} --webroot-path /home/{{ user_name }}/live/public/"
+  shell: "./certbot-auto certonly --non-interactive --agree-tos --webroot --domain {{ domain_name }} --email {{ email }} --webroot-path /home/{{ user_name }}/live/public/"
   args:
     chdir: "{{ letsencrypt_certbot_path }}"
     creates: "/etc/letsencrypt/live/{{ domain_name }}"
