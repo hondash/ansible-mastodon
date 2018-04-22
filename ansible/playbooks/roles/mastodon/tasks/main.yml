@@ -1,12 +1,5 @@
 ---
 
-- name: "Include {{ ansible_distribution }} vars"
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ lower_distribution }}.yml"
-    - "{{ lower_os_family }}.yml"
-  tags: mastodon
-
 - name: Include tasks
   include_role:
     name: mastodon
@@ -121,16 +114,6 @@
     - Reload nginx
   tags: mastodon
 
-- name: Create cron job
-  when: not is_test
-  template:
-    src: letsencrypt-renew.sh.j2
-    dest: /etc/cron.daily/letsencrypt-renew.sh
-    mode: u+x
-  notify:
-    - Restart cron
-  tags: mastodon
-
 - name: Add DB user
   when: ansible_virtualization_type != "docker"
   postgresql_user:
@@ -162,22 +145,4 @@
     name: "{{ item }}"
     enabled: yes
   with_items: *mastodon_services
-  tags: mastodon
-
-- name: Add cron env
-  when: not is_test
-  cron:
-    name: RAILS_ENV
-    env: yes
-    value: production
-  tags: mastodon
-
-- name: Add cron
-  when: not is_test
-  cron:
-    name: Remote media attachment cache cleanup
-    special_time: daily
-    job: "cd /home/mastodon/live && /home/mastodon/.rbenv/shims/bundle exec rake mastodon:media:remove_remote"
-  notify:
-    - Restart cron
   tags: mastodon

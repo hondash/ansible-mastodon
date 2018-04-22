@@ -1,2 +1,8 @@
 ---
-# handlers file for cron
+
+- name: Restart cron
+  when: ansible_virtualization_type != "docker"
+  systemd:
+    name: "{{ cron_service_name }}"
+    state: restarted
+  tags: cron
