@@ -10,8 +10,8 @@
 - name: Create cron job
   when: not is_test
   template:
-    src: letsencrypt-renew.sh.j2
-    dest: /etc/cron.daily/letsencrypt-renew.sh
+    src: letsencrypt-renew.j2
+    dest: /etc/cron.daily/letsencrypt-renew
     mode: u+x
   notify:
     - Restart cron
