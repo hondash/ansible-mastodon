@@ -1,0 +1,40 @@
+---
+
+- name: "Include {{ ansible_distribution }} vars"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ lower_distribution }}.yml"
+    - "{{ lower_os_family }}.yml"
+  tags: cron
+
+- name: Create cron job
+  when: not is_test
+  template:
+    src: letsencrypt-renew.j2
+    dest: /etc/cron.daily/letsencrypt-renew
+    mode: u+x
+  notify:
+    - Restart cron
+  tags: cron
+
+- name: Add cron env
+  when: not is_test
+  cron:
+    name: RAILS_ENV
+    env: yes
+    value: production
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: cron
+
+- name: Add cron
+  when: not is_test
+  cron:
+    name: Remote media attachment cache cleanup
+    special_time: daily
+    job: "cd /home/mastodon/live && /home/mastodon/.rbenv/shims/bundle exec rake mastodon:media:remove_remote"
+  become: yes
+  become_user: "{{ user_name }}"
+  notify:
+    - Restart cron
+  tags: cron
