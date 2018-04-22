@@ -16,7 +16,8 @@
     ansible-playbook playbooks/mastodon-setup.yml -l HOST_NAME --extra-vars '{ "domain_name":"DOMAIN_NAME", "postgresql_user_password": "PASSWORD", "email": "EMAIL" }'
     ```
 
-    If remote host has low memory, you can use swap by adding `"enable_swap": "true"` to extra vars.
+    If remote host has low memory, you can use swap by adding `"enable_swap": true` to extra vars.  
+    If you want to obtain certificate manually, add `"skip_letsencrypt": true` to extra vars and you can remove `email` var.
 1. Login remote host via ssh then execute following commands as mastodon user.
 
     ```sh
