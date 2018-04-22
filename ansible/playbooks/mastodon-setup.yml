@@ -9,3 +9,4 @@
     - role: timezone
     - role: letsencrypt
     - role: mastodon
+    - role: cron
