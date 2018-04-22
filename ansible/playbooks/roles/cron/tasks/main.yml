@@ -15,7 +15,7 @@
     mode: u+x
   notify:
     - Restart cron
-  tags: mastodon
+  tags: cron
 
 - name: Add cron env
   when: not is_test
