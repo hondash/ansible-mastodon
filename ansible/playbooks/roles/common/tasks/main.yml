@@ -16,6 +16,12 @@
     - "{{ lower_os_family }}.yml"
   tags: common
 
+- name: Create temp directory
+  file:
+    path: "{{ temp_directory }}"
+    state: directory
+  tags: common
+
 # If tasks fail because of out of memory, use 'enable_swap' variable to true
 - name: free -m
   when: enable_swap
