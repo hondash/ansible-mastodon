@@ -1,0 +1,10 @@
+---
+
+- name: Unarchive
+  unarchive:
+    src: "{{ temp_directory }}/git-{{ git_version }}.tar.gz"
+    dest: "/opt"
+    extra_opts:
+      - "--no-same-owner"
+    remote_src: yes
+  tags: git

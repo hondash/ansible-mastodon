@@ -1,0 +1,7 @@
+---
+
+- name: Download tarball
+  get_url:
+    url: "https://github.com/git/git/archive/v{{ git_version }}.tar.gz"
+    dest: "{{ temp_directory }}/git-{{ git_version }}.tar.gz"
+  tags: git
