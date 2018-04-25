@@ -1,14 +1,10 @@
 ---
 
-- name: Create directory
-  file:
-    path: /opt/certbot
-    state: directory
-  tags: letsencrypt
-
-- name: Download certbot
-  get_url:
-    url: https://dl.eff.org/certbot-auto
-    dest: "{{ letsencrypt_certbot_path }}/certbot-auto"
-    mode: a+x
-  tags: letsencrypt
+- name: Include tasks
+  include_role:
+    name: common
+    tasks_from: "{{ item }}"
+  with_first_found:
+    - "{{ lower_distribution }}.yml"
+    - "{{ lower_os_family }}.yml"
+  tags: common

@@ -1,0 +1,18 @@
+---
+
+- name: Obtain SSL certificate
+  when: not skip_letsencrypt and stage == 'production'
+  shell: |
+    ./certbot-auto certonly \
+      --non-interactive \
+      --agree-tos \
+      --domain {{ domain_name }} \
+      --email {{ email }} \
+      --webroot \
+      --webroot-path /home/{{ user_name }}/live/public/
+  args:
+    chdir: "{{ letsencrypt_certbot_path }}"
+    creates: "/etc/letsencrypt/live/{{ domain_name }}"
+  tags:
+    - letsencrypt
+    - production

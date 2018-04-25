@@ -1,0 +1,20 @@
+---
+
+- name: Create directory
+  file:
+    path: /opt/certbot
+    state: directory
+  tags: letsencrypt
+
+- name: Download certbot
+  get_url:
+    url: https://dl.eff.org/certbot-auto
+    dest: "{{ letsencrypt_certbot_path }}/certbot-auto"
+    mode: a+x
+  tags: letsencrypt
+
+- name: "Inclue _obtain_certificate task for {{ stage }}"
+  include_role:
+    name: letsencrypt
+    tasks_from: "_obtain_certificate/{{ stage }}"
+  tags: letsencrypt
