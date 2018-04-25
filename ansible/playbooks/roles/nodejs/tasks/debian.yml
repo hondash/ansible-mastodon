@@ -3,12 +3,12 @@
 - name: Download setup file
   get_url:
     url: https://deb.nodesource.com/setup_6.x
-    dest: /var/tmp/nodejs-setup_6.x
+    dest: "{{ temp_directory }}/nodejs-setup_6.x"
     mode: "u+x"
   tags: nodejs
 
 - name: Execute setup file (add nodejs repository)
-  shell: /var/tmp/nodejs-setup_6.x
+  shell: "{{ temp_directory }}/nodejs-setup_6.x"
   tags: nodejs
 
 - name: Install nodejs
