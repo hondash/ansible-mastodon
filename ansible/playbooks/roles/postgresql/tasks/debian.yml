@@ -26,7 +26,7 @@
   tags: postgresql
 
 - name: Start postgresql
-  when: ansible_virtualization_type != "docker"
+  when: not is_docker
   systemd:
     name: postgresql
     enabled: yes

@@ -1,4 +1,5 @@
 ---
 
 enable_swap: false
+is_docker: ansible_virtualization_type == "docker"
 swap_size: 1024

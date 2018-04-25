@@ -10,7 +10,7 @@
   tags: nginx
 
 - name: Start nginx
-  when: ansible_virtualization_type != "docker"
+  when: not is_docker
   systemd:
     name: nginx
     state: started

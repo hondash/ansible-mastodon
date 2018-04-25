@@ -1,14 +1,14 @@
 ---
 
 - name: Reload nginx
-  when: ansible_virtualization_type != "docker"
+  when: not is_docker
   systemd:
     name: nginx
     state: reloaded
   tags: mastodon
 
 - name: Daemon reload
-  when: ansible_virtualization_type != "docker"
+  when: not is_docker
   systemd:
     daemon_reload: yes
   tags: mastodon

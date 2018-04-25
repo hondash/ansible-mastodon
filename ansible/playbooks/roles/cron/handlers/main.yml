@@ -1,7 +1,7 @@
 ---
 
 - name: Restart cron
-  when: ansible_virtualization_type != "docker"
+  when: not is_docker
   systemd:
     name: "{{ cron_service_name }}"
     state: restarted

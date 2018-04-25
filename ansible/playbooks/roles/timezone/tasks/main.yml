@@ -1,7 +1,7 @@
 ---
 
 - name: Set timezone
-  when: ansible_virtualization_type != "docker"
+  when: not is_docker
   timezone:
     name: "{{ timezone }}"
   tags: timezone
