@@ -15,3 +15,15 @@
     update_cache: yes
     enablerepo: nginx
   tags: nginx
+
+- name: Include _remove_default.conf.yml
+  include_role:
+    name: nginx
+    tasks_from: _remove_default.conf
+  tags: nginx
+
+- name: Include _start.yml
+  include_role:
+    name: nginx
+    tasks_from: _start
+  tags: nginx

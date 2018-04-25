@@ -1,0 +1,10 @@
+---
+
+- name: Start nginx
+  when: not is_docker
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes
+  notify: Reload nginx
+  tags: nginx

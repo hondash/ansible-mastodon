@@ -9,19 +9,6 @@
     - "{{ lower_os_family }}.yml"
   tags: nginx
 
-- name: Remove default.conf
-  file:
-    path: /etc/nginx/conf.d/default.conf
-    state: absent
-
-- name: Start nginx
-  when: not is_docker
-  systemd:
-    name: nginx
-    state: started
-    enabled: yes
-  tags: nginx
-
 - name: nginx -v
   shell: nginx -v
   register: nginx_installed_version

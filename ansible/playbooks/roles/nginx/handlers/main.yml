@@ -1,1 +1,8 @@
 ---
+
+- name: Reload nginx
+  when: not is_docker
+  systemd:
+    name: nginx
+    state: reloaded
+  tags: nginx
