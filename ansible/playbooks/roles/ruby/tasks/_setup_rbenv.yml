@@ -1,0 +1,59 @@
+---
+
+- name: git clone rbenv
+  git:
+    repo: https://github.com/rbenv/rbenv.git
+    dest: "{{ ruby_rbenv_path }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: ruby
+
+- name: "src/configure && make -C src"
+  shell: src/configure && make -C src
+  args:
+    chdir: "{{ ruby_rbenv_path }}"
+    creates: "{{ ruby_rbenv_path }}/src/Makefile"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: ruby
+
+- name: Check that rbenv init is already executed
+  shell: cat ~/.bashrc
+  become: yes
+  become_user: "{{ user_name }}"
+  register: ruby_output_bashrc
+  tags: ruby
+
+- name: rbenv init
+  when: "'.rbenv/shims' not in ruby_output_bashrc.stdout"
+  shell: rbenv init -
+  become: yes
+  become_user: "{{ user_name }}"
+  environment:
+    PATH: "{{ ruby_rbenv_path }}/bin:{{ ansible_env.PATH }}"
+  register: rbenv_init_result
+  tags: ruby
+
+- debug:
+    var: rbenv_init_result
+
+- name: Add rbenv path to environment variable
+  when: rbenv_init_result.skipped is not defined or not rbenv_init_result.skipped
+  blockinfile:
+    path: ~/.bashrc
+    block: |
+      export PATH="$HOME/.rbenv/bin:$PATH"
+      {{ rbenv_init_result.stdout }}
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: ruby
+
+- name: git clone ruby-build
+  git:
+    repo: https://github.com/rbenv/ruby-build.git
+    dest: "{{ ruby_rbenv_path }}/plugins/ruby-build"
+    version: v20180424
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: ruby
+
