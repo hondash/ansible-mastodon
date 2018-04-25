@@ -21,36 +21,3 @@
     path: "{{ temp_directory }}"
     state: directory
   tags: common
-
-# If tasks fail because of out of memory, use 'enable_swap' variable to true
-- name: free -m
-  when: enable_swap
-  shell: free -m
-  tags: common
-
-- name: swapon -s
-  when: enable_swap
-  shell: swapon -s
-  register: common_exist_swap
-  tags: common
-
-- name: "dd if=/dev/zero of=/swapfile bs=1M count={{ swap_size }}"
-  when: "enable_swap and '/swapfile' not in common_exist_swap.stdout"
-  shell: "dd if=/dev/zero of=/swapfile bs=1M count={{ swap_size }}"
-  tags: common
-
-- name: Set permission 0600
-  when: "enable_swap and '/swapfile' not in common_exist_swap.stdout"
-  file:
-    path: /swapfile
-    mode: 0600
-
-- name: mkswap /swapfile
-  when: "enable_swap and '/swapfile' not in common_exist_swap.stdout"
-  shell: mkswap /swapfile
-  tags: common
-
-- name: swapon /swapfile
-  when: "enable_swap and '/swapfile' not in common_exist_swap.stdout"
-  shell: swapon /swapfile
-  tags: common

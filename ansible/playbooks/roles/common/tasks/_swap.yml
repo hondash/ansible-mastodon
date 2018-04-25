@@ -1,0 +1,32 @@
+---
+
+# If tasks fail because of out of memory, use 'enable_swap' variable to true
+- name: free -m
+  shell: free -m
+  tags: common
+
+- name: swapon -s
+  shell: swapon -s
+  register: common_exist_swap
+  tags: common
+
+- name: "dd if=/dev/zero of=/swapfile bs=1M count={{ swap_size }}"
+  when: "'/swapfile' not in common_exist_swap.stdout"
+  shell: "dd if=/dev/zero of=/swapfile bs=1M count={{ swap_size }}"
+  tags: common
+
+- name: Set permission 0600
+  when: "'/swapfile' not in common_exist_swap.stdout"
+  file:
+    path: /swapfile
+    mode: 0600
+
+- name: mkswap /swapfile
+  when: "'/swapfile' not in common_exist_swap.stdout"
+  shell: mkswap /swapfile
+  tags: common
+
+- name: swapon /swapfile
+  when: "'/swapfile' not in common_exist_swap.stdout"
+  shell: swapon /swapfile
+  tags: common
