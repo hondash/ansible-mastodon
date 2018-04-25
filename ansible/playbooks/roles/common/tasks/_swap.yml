@@ -20,6 +20,7 @@
   file:
     path: /swapfile
     mode: 0600
+  tags: common
 
 - name: mkswap /swapfile
   when: "'/swapfile' not in common_exist_swap.stdout"
