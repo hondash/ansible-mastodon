@@ -1,0 +1,7 @@
+---
+
+- name: Add symbolic link
+  file:
+    src: "{{ git_install_path }}/bin/git"
+    dest: /usr/local/bin/git
+    state: link

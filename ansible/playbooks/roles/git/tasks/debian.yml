@@ -1,5 +1,14 @@
 ---
 
+- name: Include _remove_installed_git task
+  include_role:
+    name: git
+    tasks_from: "{{ item }}"
+  with_first_found:
+    - "_remove_installed_git/{{ lower_distribution }}.yml"
+    - "_remove_installed_git/{{ lower_os_family }}.yml"
+  tags: git
+
 - name: Install dependencies
   apt:
     name: "{{ git_install_dependency }}"
@@ -13,4 +22,29 @@
     - libz-dev
   loop_control:
     loop_var: git_install_dependency
+  tags: git
+
+- name: Include _download task
+  include_role:
+    name: git
+    tasks_from: _download
+  tags: git
+
+- name: Include _unarchive task
+  include_role:
+    name: git
+    tasks_from: _unarchive
+  tags: git
+
+- name: "Include _make task if git version isn't {{ git_version }}"
+  when: git_version not in git_current_version.std_out
+  include_role:
+    name: git
+    tasks_from: _make
+  tags: git
+
+- name: Include _add_symbolic_link task
+  include_role:
+    name: git
+    tasks_from: _add_symbolic_link
   tags: git

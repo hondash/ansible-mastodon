@@ -14,7 +14,7 @@
     loop_var: common_install_package
   tags: common
 
-- name: Include _swap task when enable_swap is true
+- name: Include _swap task if enable_swap is true
   when: enable_swap
   include_role:
     name: common

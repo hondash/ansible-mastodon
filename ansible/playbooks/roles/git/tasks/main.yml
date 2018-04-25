@@ -9,67 +9,8 @@
     - "{{ lower_os_family }}.yml"
   tags: git
 
-- name: Download tarball
-  get_url:
-    url: "https://github.com/git/git/archive/v{{ git_version }}.tar.gz"
-    dest: "{{ temp_directory }}/git-{{ git_version }}.tar.gz"
-  tags: git
-
-- name: Unarchive
-  unarchive:
-    src: "{{ temp_directory }}/git-{{ git_version }}.tar.gz"
-    dest: "/opt"
-    extra_opts:
-      - "--no-same-owner"
-    remote_src: yes
-  tags: git
-
-- name: which git
-  shell: which git
-  environment:
-    PATH: "{{ git_install_path }}/bin:{{ ansible_env.PATH }}"
-  failed_when: git_exists.rc not in [0, 1]
-  register: git_exists
-  tags: git
-
-- name: make configure
-  when: git_version not in git_exists.stdout
-  shell: make configure
-  args:
-    chdir: "{{ git_install_path }}"
-  tags: git
-
-- name: "./configure --prefix={{ git_install_path }}"
-  when: git_version not in git_exists.stdout
-  shell: "./configure --prefix={{ git_install_path }}"
-  args:
-    chdir: "{{ git_install_path }}"
-  tags: git
-
-- name: make all
-  when: git_version not in git_exists.stdout
-  shell: make all
-  args:
-    chdir: "{{ git_install_path }}"
-  tags: git
-
-- name: make install
-  when: git_version not in git_exists.stdout
-  shell: make install
-  args:
-    chdir: "{{ git_install_path }}"
-  tags: git
-
-- name: Set env
-  template:
-    src: git.sh.j2
-    dest: /etc/profile.d/git.sh
-  tags: git
-
 - name: git --version
   shell: git --version
-  environment:
-    PATH: "{{ git_install_path }}/bin:{{ ansible_env.PATH }}"
   register: git_installed_version
   tags: git
 
