@@ -34,9 +34,6 @@
   register: rbenv_init_result
   tags: ruby
 
-- debug:
-    var: rbenv_init_result
-
 - name: Add rbenv path to environment variable
   when: rbenv_init_result.skipped is not defined or not rbenv_init_result.skipped
   blockinfile:
