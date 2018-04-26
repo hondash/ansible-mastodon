@@ -6,7 +6,6 @@
   become_user: root
   roles:
     - role: common
-    - role: timezone
     - role: letsencrypt
     - role: mastodon
     - role: cron

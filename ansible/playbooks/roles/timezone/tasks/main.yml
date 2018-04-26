@@ -1,7 +1,0 @@
----
-
-- name: Set timezone
-  when: not is_docker
-  timezone:
-    name: "{{ timezone }}"
-  tags: timezone
