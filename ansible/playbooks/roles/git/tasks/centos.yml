@@ -39,7 +39,7 @@
   tags: git
 
 - name: "Include _make task if git version isn't {{ git_version }}"
-  when: git_version not in git_current_version.std_out
+  when: git_version not in git_current_version.stdout
   include_role:
     name: git
     tasks_from: _make

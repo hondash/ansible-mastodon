@@ -1,0 +1,9 @@
+---
+
+- name: Set global ruby
+  shell: "rbenv global {{ ruby_version }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  environment:
+    PATH: "{{ ruby_rbenv_path }}/bin:{{ ansible_env.PATH }}"
+  tags: ruby

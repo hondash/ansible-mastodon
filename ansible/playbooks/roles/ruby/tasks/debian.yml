@@ -18,3 +18,21 @@
   loop_control:
     loop_var: ruby_install_dependency
   tags: ruby
+
+- name: Include _setup_rbenv task
+  include_role:
+    name: ruby
+    tasks_from: _setup_rbenv
+  tags: ruby
+
+- name: Include _install_ruby task
+  include_role:
+    name: ruby
+    tasks_from: _install_ruby
+  tags: ruby
+
+- name: Include _set_global_ruby task
+  include_role:
+    name: ruby
+    tasks_from: _set_global_ruby
+  tags: ruby
