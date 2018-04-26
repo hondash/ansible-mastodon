@@ -9,12 +9,9 @@
     - "{{ lower_os_family }}.yml"
   tags: mastodon
 
-- name: Start redis
-  when: not is_docker
-  systemd:
+- name: Include redis main task
+  include_role:
     name: redis
-    enabled: yes
-    state: started
   tags: mastodon
 
 - name: git clone mastodon

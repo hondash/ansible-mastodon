@@ -10,8 +10,6 @@
     - libxml2             # RubyGems nokogiri
     - libxml2-dev         #   "
     - libxslt1-dev        #   "
-    - redis-server        # redis
-    - redis-tools         #   "
     - pkg-config          # RubyGems cld3
     - libprotobuf-dev     #   "
     - protobuf-compiler   #   "

@@ -1,0 +1,10 @@
+---
+
+- name: Include tasks
+  include_role:
+    name: redis
+    tasks_from: "{{ item }}"
+  with_first_found:
+    - "{{ lower_distribution }}.yml"
+    - "{{ lower_os_family }}.yml"
+  tags: redis

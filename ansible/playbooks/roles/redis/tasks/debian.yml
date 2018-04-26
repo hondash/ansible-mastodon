@@ -1,0 +1,19 @@
+---
+
+- name: Install dependencies
+  apt:
+    name: "{{ redis_dependency }}"
+  with_items:
+    - redis-server
+    - redis-tools
+  loop_control:
+    loop_var: redis_dependency
+  tags: redis
+
+- name: Start redis
+  when: not is_docker
+  systemd:
+    name: redis
+    enabled: yes
+    state: started
+  tags: redis

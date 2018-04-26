@@ -25,7 +25,6 @@
     - libxml2-devel         #   "
     - libxslt               #   "
     - libxslt-devel         #   "
-    - redis                 # redis
     - protobuf-devel        # RubyGems cld3
     - libicu-devel          # RubyGems charlock_holmes
     - gcc                   #   "

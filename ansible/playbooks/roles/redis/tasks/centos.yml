@@ -1,0 +1,15 @@
+---
+
+- name: Install dependencies
+  yum:
+    name: redis
+    enablerepo: epel
+  tags: redis
+
+- name: Start redis
+  when: not is_docker
+  systemd:
+    name: redis
+    enabled: yes
+    state: started
+  tags: redis
