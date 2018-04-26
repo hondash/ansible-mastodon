@@ -12,7 +12,7 @@
   template:
     src: letsencrypt-renew.j2
     dest: /etc/cron.daily/letsencrypt-renew
-    mode: u+x
+    mode: a+x
   notify:
     - Restart cron
   tags: cron
