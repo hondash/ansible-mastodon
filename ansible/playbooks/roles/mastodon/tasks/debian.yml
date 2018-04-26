@@ -10,8 +10,6 @@
     - libxml2             # RubyGems nokogiri
     - libxml2-dev         #   "
     - libxslt1-dev        #   "
-    - redis-server        # redis
-    - redis-tools         #   "
     - pkg-config          # RubyGems cld3
     - libprotobuf-dev     #   "
     - protobuf-compiler   #   "
@@ -20,4 +18,51 @@
     - libpq-dev           # RubyGems pg
   loop_control:
     loop_var: mastodon_install_dependency
+  tags: mastodon
+
+- name: Include redis main task
+  include_role:
+    name: redis
+  tags: mastodon
+
+- name: Include _clone_mastodon tasks
+  include_role:
+    name: mastodon
+    tasks_from: _clone_mastodon
+  tags: mastodon
+
+- name: Include _install_bundler tasks
+  include_role:
+    name: ruby
+    tasks_from: _install_bundler
+  tags: mastodon
+
+- name: Include _install_gem_dependencies tasks
+  include_role:
+    name: ruby
+    tasks_from: _install_gem_dependencies
+  tags: mastodon
+
+- name: Include _install_node_dependencies tasks
+  include_role:
+    name: yarn
+    tasks_from: _install_node_dependencies
+  tags: mastodon
+
+- name: Include _obtain_certificate tasks
+  include_role:
+    name: mastodon
+    tasks_from: _obtain_certificate
+  tags: mastodon
+
+- name: Include _add_db_user tasks
+  include_role:
+    name: postgresql
+    tasks_from: _add_db_user
+  tags: mastodon
+
+- name: Include _set_mastodon_services tasks
+  include_role:
+    name: mastodon
+    tasks_from: _set_mastodon_services
   tags: mastodon

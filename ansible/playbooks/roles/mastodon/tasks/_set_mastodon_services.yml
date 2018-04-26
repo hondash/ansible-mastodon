@@ -1,0 +1,23 @@
+---
+
+- name: Add mastodon systemd services
+  template:
+    src: "etc/systemd/system/{{ mastodon_service }}.j2"
+    dest: "/etc/systemd/system/{{ mastodon_service }}"
+  with_items: &mastodon_services
+    - mastodon-web.service
+    - mastodon-sidekiq.service
+    - mastodon-streaming.service
+  loop_control:
+    loop_var: mastodon_service
+  notify:
+    - Daemon reload
+  tags: mastodon
+
+- name: Set mastodon services enabled
+  when: not is_docker
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+  with_items: *mastodon_services
+  tags: mastodon

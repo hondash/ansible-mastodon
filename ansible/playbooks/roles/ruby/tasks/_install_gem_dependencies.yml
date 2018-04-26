@@ -1,0 +1,17 @@
+---
+
+- name: Install gem dependencies
+  bundler:
+    deployment_mode: yes
+    exclude_groups:
+      - development
+      - test
+    extra_args: "-j{{ cpu_num.stdout }}"
+    chdir: "{{ mastodon_path }}"
+  environment:
+    PATH: "/home/{{ user_name }}/.rbenv/shims:{{ ansible_env.PATH }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags:
+    - ruby
+    - mastodon
