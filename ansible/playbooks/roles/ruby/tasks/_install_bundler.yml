@@ -1,0 +1,25 @@
+---
+
+- name: Install bundler
+  gem:
+    name: bundler
+    user_install: no
+  environment:
+    PATH: "/home/{{ user_name }}/.rbenv/shims:{{ ansible_env.PATH }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags:
+    - ruby
+    - mastodon
+
+- name: bundle config
+  shell: "bundle config build.pg --with-pg-config={{ postgresql_pg_config_path }}/bin/pg_config"
+  args:
+    chdir: "{{ mastodon_path }}"
+  environment:
+    PATH: "/home/{{ user_name }}/.rbenv/shims:{{ ansible_env.PATH }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags:
+    - ruby
+    - mastodon

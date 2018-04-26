@@ -20,3 +20,8 @@
     name: common
     tasks_from: _swap
   tags: common
+
+- name: getconf _NPROCESSORS_ONLN
+  shell: getconf _NPROCESSORS_ONLN
+  register: cpu_num
+  tags: common

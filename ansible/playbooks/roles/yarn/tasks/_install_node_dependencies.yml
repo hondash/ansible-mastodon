@@ -1,0 +1,13 @@
+---
+
+# no yarn module yet
+# @see https://github.com/ansible/ansible/pull/19026
+- name: Install node.js dependencies
+  shell: yarn install --pure-lockfile
+  args:
+    chdir: "/home/{{ user_name }}/live"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags:
+    - yarn
+    - mastodon

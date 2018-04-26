@@ -1,0 +1,11 @@
+---
+
+- name: git clone mastodon
+  git:
+    repo: "{{ mastodon_github_url }}"
+    dest: "{{ mastodon_path }}"
+    update: no
+    version: "{{ mastodon_version }}"
+  become: yes
+  become_user: "{{ user_name }}"
+  tags: mastodon
