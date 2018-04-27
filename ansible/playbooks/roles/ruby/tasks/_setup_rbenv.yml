@@ -4,6 +4,8 @@
   git:
     repo: https://github.com/rbenv/rbenv.git
     dest: "{{ ruby_rbenv_path }}"
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
   become: yes
   become_user: "{{ user_name }}"
   tags: ruby
@@ -50,6 +52,8 @@
     repo: https://github.com/rbenv/ruby-build.git
     dest: "{{ ruby_rbenv_path }}/plugins/ruby-build"
     version: v20180424
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
   become: yes
   become_user: "{{ user_name }}"
   tags: ruby
