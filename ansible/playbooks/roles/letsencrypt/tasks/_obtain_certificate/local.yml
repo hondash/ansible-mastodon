@@ -27,4 +27,5 @@
       creates: /etc/letsencrypt/live/localhost
   tags:
     - letsencrypt
+    - mastodon
     - local

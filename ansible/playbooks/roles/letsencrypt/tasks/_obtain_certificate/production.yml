@@ -15,4 +15,5 @@
     creates: "/etc/letsencrypt/live/{{ domain_name }}"
   tags:
     - letsencrypt
+    - mastodon
     - production

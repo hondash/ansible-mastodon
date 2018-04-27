@@ -12,25 +12,26 @@
     src: mastodon.conf.j2
     dest: /etc/nginx/conf.d/mastodon.conf
     validate: bash -c 'nginx -t -c /dev/stdin <<< "events {worker_connections 1;} http { include %s; }"'
+  register: mastodon_nginx_config
   tags: mastodon
 
 - name: Reload nginx
-  when: not is_docker
+  when: (mastodon_nginx_config.skipped is not defined or not mastodon_nginx_config.skipped) and not is_docker
   systemd:
     name: nginx
     state: reloaded
+  register: mastodon_nginx_reloaded
   tags: mastodon
 
-- name: Obtain SSL certificate
-  when: not skip_letsencrypt and not is_test
-  shell: "./certbot-auto certonly --non-interactive --agree-tos --webroot --domain {{ domain_name }} --email {{ email }} --webroot-path /home/{{ user_name }}/live/public/"
-  args:
-    chdir: "{{ letsencrypt_certbot_path }}"
-    creates: "/etc/letsencrypt/live/{{ domain_name }}"
+- name: "Inclue _obtain_certificate task for {{ stage }}"
+  when: not skip_letsencrypt and not mastodon_certificate.stat.exists
+  include_role:
+    name: letsencrypt
+    tasks_from: "_obtain_certificate/{{ stage }}"
   tags: mastodon
 
 - name: Remove comment out of mastodon.conf
-  when: not skip_letsencrypt
+  when: (mastodon_nginx_reloaded.skipped is not defined or not mastodon_nginx_reloaded.skipped) and not skip_letsencrypt
   replace:
     path: /etc/nginx/conf.d/mastodon.conf
     regexp: '^#(\s+)ssl_certificate(.*)$'
