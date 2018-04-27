@@ -2,3 +2,4 @@ lower_os_family: "{{ ansible_os_family | lower }}"
 lower_distribution: "{{ ansible_distribution | lower }}"
 
 is_test: false
+stage: production

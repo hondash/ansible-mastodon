@@ -24,6 +24,7 @@ Vagrant.configure("2") do |config|
         "domain_name": "example.com",
         "email": "admin@example.com",
         "is_test": true,
+        "stage": "local",
         "skip_letsencrypt": true,
         "postgresql_user_password": "test_password"
       }
