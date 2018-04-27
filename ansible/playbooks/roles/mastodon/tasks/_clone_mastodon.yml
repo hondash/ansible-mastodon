@@ -6,6 +6,8 @@
     dest: "{{ mastodon_path }}"
     update: no
     version: "{{ mastodon_version }}"
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
   become: yes
   become_user: "{{ user_name }}"
   tags: mastodon

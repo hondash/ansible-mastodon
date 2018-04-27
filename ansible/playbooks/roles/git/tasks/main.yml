@@ -11,6 +11,8 @@
 
 - name: git --version
   shell: git --version
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
   register: git_installed_version
   tags: git
 

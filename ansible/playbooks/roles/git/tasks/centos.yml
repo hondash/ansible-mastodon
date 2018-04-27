@@ -1,14 +1,5 @@
 ---
 
-- name: Include _remove_installed_git task
-  include_role:
-    name: git
-    tasks_from: "{{ item }}"
-  with_first_found:
-    - "_remove_installed_git/{{ lower_distribution }}.yml"
-    - "_remove_installed_git/{{ lower_os_family }}.yml"
-  tags: git
-
 - name: Install dependencies
   yum:
     name: "{{ git_install_dependency }}"
@@ -36,6 +27,14 @@
   include_role:
     name: git
     tasks_from: _unarchive
+  tags: git
+
+- name: "Check that git version is v{{ git_version }}"
+  shell: git --version
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+  register: git_current_version
+  failed_when: git_current_version.rc not in [0, 127]
   tags: git
 
 - name: "Include _make task if git version isn't {{ git_version }}"
