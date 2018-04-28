@@ -8,7 +8,7 @@
   tags: cron
 
 - name: Create cron job
-  when: not is_test
+  when: not is_docker
   template:
     src: letsencrypt-renew.j2
     dest: /etc/cron.daily/letsencrypt-renew
@@ -18,7 +18,7 @@
   tags: cron
 
 - name: Add cron env
-  when: not is_test
+  when: not is_docker
   cron:
     name: RAILS_ENV
     env: yes
@@ -28,7 +28,7 @@
   tags: cron
 
 - name: Add cron
-  when: not is_test
+  when: not is_docker
   cron:
     name: Remote media attachment cache cleanup
     special_time: daily

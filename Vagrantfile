@@ -23,9 +23,8 @@ Vagrant.configure("2") do |config|
         "enable_swap": true,
         "domain_name": "example.com",
         "email": "admin@example.com",
-        "is_test": true,
         "stage": "local",
-        "skip_letsencrypt": true,
+        "skip_letsencrypt": false,
         "postgresql_user_password": "test_password"
       }
     }
