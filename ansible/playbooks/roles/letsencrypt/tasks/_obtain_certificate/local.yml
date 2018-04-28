@@ -16,7 +16,7 @@
     openssl req \
       -x509 \
       -out /etc/letsencrypt/live/localhost/fullchain.pem \
-      -keyout privkey.pem \
+      -keyout /etc/letsencrypt/live/localhost/privkey.pem \
       -newkey rsa:2048 \
       -nodes -sha256 \
       -subj '/CN=localhost' \
@@ -24,7 +24,7 @@
       -config <(printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
   args:
       executable: /bin/bash
-      creates: /etc/letsencrypt/live/localhost
+      creates: /etc/letsencrypt/live/localhost/fullchain.pem
   tags:
     - letsencrypt
     - mastodon
