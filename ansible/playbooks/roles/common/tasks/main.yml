@@ -1,5 +1,23 @@
 ---
 
+- name: Output variables
+  debug:
+    msg: [
+      " ============================================================ ",
+      " Set up for '{{ stage }}' ",
+      " ********** Environment ********** ",
+      " OS family        : {{ ansible_os_family }} ",
+      " Distribution     : {{ ansible_distribution }} ",
+      " docker           : {% if is_docker %}Yes{% else %}No{% endif %} ",
+      " use swap         : {% if enable_swap %}Yes (size={{ swap_size }}MB){% else %}No{% endif %} ",
+      " ********** Info ********** ",
+      " domain           : {{ domain_name }} ",
+      " email            : {{ email }} ",
+      " skip letsencrypt : {% if skip_letsencrypt %}Yes{% else %}No{% endif %} ",
+      " DB password      : - secret -",
+      "============================================================ "]
+  tags: common
+
 - name: "Include {{ ansible_distribution }} vars"
   include_vars: "{{ item }}"
   with_first_found:
