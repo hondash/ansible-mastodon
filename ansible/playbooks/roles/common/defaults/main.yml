@@ -4,4 +4,5 @@ enable_swap: false
 is_docker: "{{ ansible_virtualization_type == 'docker' }}"
 swap_size: 1024
 temp_directory: /var/tmp/ansible
+skip_letsencrypt: false
 stage: production
