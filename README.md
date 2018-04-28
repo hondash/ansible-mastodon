@@ -16,7 +16,7 @@
     ansible-playbook playbooks/mastodon-setup.yml -l HOST_NAME --extra-vars '{ "domain_name":"DOMAIN_NAME", "postgresql_user_password": "PASSWORD", "email": "EMAIL" }'
     ```
 
-    You can use extra vars.
+    You can use more extra-vars.
     
     | variable | value | |
     |---|---|---|
