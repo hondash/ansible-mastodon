@@ -16,15 +16,21 @@
     ansible-playbook playbooks/mastodon-setup.yml -l HOST_NAME --extra-vars '{ "domain_name":"DOMAIN_NAME", "postgresql_user_password": "PASSWORD", "email": "EMAIL" }'
     ```
 
-    If remote host has low memory, you can use swap by adding `"enable_swap": true` to extra vars.  
-    If you want to obtain certificate manually, add `"skip_letsencrypt": true` to extra vars and you can remove `email` var.
+    You can use extra vars.
+    
+    | variable | value | |
+    |---|---|---|
+    | enable_swap | True / False | use swap if remote host has low memory.  (default: False) |
+    | stage | "local" / "production" |  If the stage is "local", create not a Let's Encrypt certificate but a self-signed certificate.  (default: "production") |
+    | skip_letsencrypt | True / False | If you want to obtain certificate manually, set it True. |
+    
 1. Login remote host via ssh then execute following commands as mastodon user.
 
     ```sh
     cd ~/live
     RAILS_ENV=production bundle exec rake mastodon:setup
     ```
-1. Start mastodon services.
+1. Start mastodon services as root user.
 
     ```sh
     systemctl start mastodon-{web,sidekiq,streaming}
