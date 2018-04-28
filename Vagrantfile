@@ -19,11 +19,11 @@ Vagrant.configure("2") do |config|
     ansible.groups = {
       "test" => ["centos", "debian", "ubuntu"],
       "test:vars" => {
-        "enable_swap": true,
+        "enable_swap": 1,
         "domain_name": "localhost",
         "email": "admin@example.com",
         "stage": "local",
-        "skip_letsencrypt": false,
+        "skip_letsencrypt": 0,
         "postgresql_user_password": "test_password"
       }
     }
