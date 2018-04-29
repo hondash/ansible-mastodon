@@ -24,7 +24,7 @@
     | stage | "local" / "production" |  If the stage is "local", create not a Let's Encrypt certificate but a self-signed certificate.  (default: "production") |
     | skip_letsencrypt | True / False | If you want to obtain certificate manually, set it True.  (default: False) |
     
-    ex) 
+    e.g.
     ```
     ansible-playbook playbooks/mastodon-setup.yml -l HOST_NAME --extra-vars '{ "domain_name":"DOMAIN_NAME", "postgresql_user_password": "PASSWORD", "email": "EMAIL", "enable_swap": True, "stage": "local", "skip_letsencrypt": True }'
     ```
