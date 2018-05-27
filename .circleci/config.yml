@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: centos:7.4.1708
     environment: &env_vars
-      - ANSIBLE_VERSION: 2.5.2
+      - ANSIBLE_VERSION: 2.5.3
     steps:
       - checkout
       - run:
